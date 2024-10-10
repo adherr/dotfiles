@@ -14,7 +14,7 @@ path=( $path $HOME/.local/bin $HOME/.cargo/bin )
 fpath=(/Users/aherr/.oh-my-zsh/custom/completions $fpath)
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/andrewherr/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -156,7 +156,7 @@ ZLE_RPROMPT_INDENT=0
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # heroku autocomplete setup
-HEROKU_AC_ZSH_SETUP_PATH=/Users/andrewherr/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
+HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
