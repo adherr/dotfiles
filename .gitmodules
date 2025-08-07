@@ -1,6 +1,7 @@
 [submodule ".config/emacs"]
 	path = .config/emacs
 	url = https://github.com/adherr/hand-rolled-emacs.git
+	branch = vimeo
 [submodule ".oh-my-zsh"]
 	path = .oh-my-zsh
 	url = https://github.com/ohmyzsh/ohmyzsh
