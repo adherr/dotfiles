@@ -4,6 +4,8 @@ typeset -U -g PATH path
 path=( $HOME/bin /usr/local/opt/mysql-client/bin /usr/local/opt/curl/bin /usr/local/opt/make/libexec/gnubin /usr/local/opt/python/libexec/bin /Library/TeX/texbin /usr/local/bin $path )
 # put in by packaging tools
 path=( $path $HOME/.local/bin $HOME/.cargo/bin )
+# windsurf
+path=( $HOME/.codeium/windsurf/bin $path)
 fpath=(/Users/aherr/.oh-my-zsh/custom/completions $fpath)
 
 # Path to your oh-my-zsh installation.
@@ -56,7 +58,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(docker docker-compose git mix ruby rails)
+plugins=(asdf docker docker-compose git rbenv ruby rails)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -154,3 +156,5 @@ HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && t
 
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
+
+eval "$(rbenv init -)"
