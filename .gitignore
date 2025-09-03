@@ -1,0 +1,20 @@
+# start with nothing
+/*
+sockets
+
+# allowlist only
+!/dotfiles
+!/.config
+
+!/.gitignore
+!/Brewfile
+
+!/.zshrc
+!/.p10k.zsh
+!/.oh-my-zsh
+
+# allowlist inside .config as well
+/.config/*
+!/.config/emacs
+!/.config/iterm2
+!/.config/starship.toml
