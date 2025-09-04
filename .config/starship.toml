@@ -3,7 +3,7 @@
 
 # Inserts a blank line between shell prompts
 add_newline = false
-format = '$all$time$character'
+format = '$all$time$status$character'
 
 [character]
 success_symbol = '[➜](bold green) '
@@ -37,6 +37,11 @@ format = '[$symbol($version )]($style)'
 
 [ruby]
 format = '[$symbol($version )]($style)'
+
+[status]
+disabled = false
+map_symbol = true
+format = '[$symbol($maybe_int)($signal_name)($common_meaning)]($style) '
 
 [time]
 disabled = false
