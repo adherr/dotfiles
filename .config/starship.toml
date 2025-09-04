@@ -3,22 +3,42 @@
 
 # Inserts a blank line between shell prompts
 add_newline = false
+format = '$all$time$character'
 
 [character]
 success_symbol = '[➜](bold green) '
 error_symbol = '[➜](bold red) '
 
+[directory]
+before_repo_root_style = 'cyan'
+repo_root_style = 'bold blue'
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+
+[docker_context]
+disabled = true
+
+[fill]
+symbol = '·'
+
+
 [gcloud]
 disabled = true
 
-[directory]
-before_repo_root_style = 'cyan'
-repo_root_style = 'bold yellow'
-truncate_to_repo = false
-fish_style_pwd_dir_length = 1
+[git_branch]
+truncation_length = 12
+format = 'on [$symbol$branch]($style) '
+
+[git_metrics]
+disabled = false
+
+[nodejs]
+format = '[$symbol($version )]($style)'
 
 [ruby]
 format = '[$symbol($version )]($style)'
 
-[nodejs]
-format = '[$symbol($version )]($style)'
+[time]
+disabled = false
+style = 'blue'
+format= '[$time]($style) '
