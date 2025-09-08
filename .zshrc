@@ -99,6 +99,8 @@ setopt extended_glob
 # for scripts that use the bash `complete` function
 autoload -U +X bashcompinit && bashcompinit
 
+export LESS='-R'
+
 # iex
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 2097152"
 
