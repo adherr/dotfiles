@@ -5,6 +5,10 @@ sockets
 # allowlist only
 !/dotfiles
 !/.config
+!/.docker
+
+# I want the docker config for reference, although it might screw me up when I forget it
+/.docker/*
 !/.docker/config.json
 
 !/.gitignore
