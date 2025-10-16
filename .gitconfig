@@ -1,0 +1,33 @@
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
+[user]
+	name = Andrew Herr
+	email = andrew.herr@testdouble.com
+	signingkey = /Users/andrewherr/.ssh/git_signing_key.pub
+[diff]
+	algorithm = histogram
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	updateRefs = true
+	autoStash = true
+[merge]
+	conflictstyle = zdiff3
+[color]
+	ui = true

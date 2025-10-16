@@ -1,71 +1,43 @@
 # uniquify PATH
 typeset -U -g PATH path
 # add non-linked homebrew packages to override system packages
-path=( $HOME/bin /usr/local/opt/mysql-client/bin /usr/local/opt/curl/bin /usr/local/opt/make/libexec/gnubin /usr/local/opt/python/libexec/bin /Library/TeX/texbin /usr/local/bin $path )
+path=( $(brew --prefix)/opt/mysql-client/bin $(brew --prefix)/opt/curl/bin $(brew --prefix)/opt/make/libexec/gnubin $(brew --prefix)/opt/python/libexec/bin /Library/TeX/texbin $(brew --prefix)/bin $path )
 # put in by packaging tools
-path=( $path $HOME/.local/bin $HOME/.cargo/bin )
-fpath=(/Users/aherr/.oh-my-zsh/custom/completions $fpath)
+path=( $path $HOME/.cargo/bin )
+# windsurf
+path=( $HOME/.codeium/windsurf/bin $path )
+# my stuff
+path=( $HOME/bin $HOME/.local/bin $path )
+# asdf
+path=( ${ASDF_DATA_DIR:-$HOME/.asdf}/shims $path )
+fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+# Enable persistent history
+HISTFILE=~/.zsh_history
+HISTSIZE=100000
+SAVEHIST=100000
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+setopt APPEND_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+# Configure the push directory stack (most people don't need this)
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+# Emacs keybindings
+bindkey -e
+# Use the up and down keys to navigate the history
+bindkey "\e[A" history-beginning-search-backward
+bindkey "\e[B" history-beginning-search-forward
+# Use Ctrl+Left and Ctrl+Right to move by words
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(docker docker-compose git mix ruby rails)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Initialize completion
+autoload -U compinit; compinit
 
 # Use 1password ssh-agent
 export SSH_AUTH_SOCK=~/.1password/agent.sock
@@ -82,9 +54,6 @@ fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # I expect emacs's concept of forward and backward word, make that happen here
 bindkey -N aherr emacs
@@ -109,14 +78,10 @@ alias ecn='emacsclient -n -c'
 # tmux
 alias tmux='TERM=xterm-256color tmux'
 
+alias ls='ls --color=auto'
 # Ruby aliases
-#unalias rg # because ripgrep is more useful than rails generate
-alias bundle='nocorrect bundle'
 alias be='bundle exec'
 alias git=hub
-
-# chef
-alias knife='nocorrect knife'
 
 # docker aliases
 alias drmi='docker rmi $(docker images -f dangling=true -q)'
@@ -133,6 +98,8 @@ setopt extended_glob
 
 # for scripts that use the bash `complete` function
 autoload -U +X bashcompinit && bashcompinit
+
+export LESS='-R'
 
 # iex
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 2097152"
@@ -154,3 +121,18 @@ HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && t
 
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
+
+eval "$(rbenv init -)"
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+# Set up zoxide to move between folders efficiently
+eval "$(zoxide init zsh)"
+# suggested by bbatsov https://batsov.com/articles/2025/06/12/zoxide-tips-and-tricks/
+alias cd='z'
+alias j='z'
+alias jj='zi'
+
+# Set up the Starship prompt
+eval "$(starship init zsh)"
