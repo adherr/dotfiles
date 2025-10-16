@@ -122,8 +122,6 @@ HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && t
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
 
-eval "$(rbenv init -)"
-
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 
