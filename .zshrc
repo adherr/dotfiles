@@ -9,8 +9,8 @@ path=( $HOME/.codeium/windsurf/bin $path )
 # my stuff
 path=( $HOME/bin $HOME/.local/bin $path )
 # asdf
+export ASDF_DATA_DIR="$HOME/.asdf"
 path=( ${ASDF_DATA_DIR:-$HOME/.asdf}/shims $path )
-fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
 # Enable persistent history
 HISTFILE=~/.zsh_history
