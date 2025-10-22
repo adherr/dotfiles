@@ -1,7 +1,7 @@
 # uniquify PATH
 typeset -U -g PATH path
 # add non-linked homebrew packages to override system packages
-path=( $(brew --prefix)/opt/mysql-client/bin $(brew --prefix)/opt/curl/bin $(brew --prefix)/opt/make/libexec/gnubin $(brew --prefix)/opt/python/libexec/bin /Library/TeX/texbin $(brew --prefix)/bin $path )
+path=( $(brew --prefix)/opt/scala@2.13/bin $(brew --prefix)/opt/mysql-client/bin $(brew --prefix)/opt/curl/bin $(brew --prefix)/opt/make/libexec/gnubin $(brew --prefix)/opt/python/libexec/bin /Library/TeX/texbin $(brew --prefix)/bin $path )
 # put in by packaging tools
 path=( $path $HOME/.cargo/bin )
 # windsurf
@@ -36,18 +36,20 @@ bindkey "\e[A" history-beginning-search-backward
 bindkey "\e[B" history-beginning-search-forward
 # Use Ctrl+Left and Ctrl+Right to move by words
 
-# Initialize completion
-autoload -U compinit; compinit
-
 # Use 1password ssh-agent
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 # this breaks things that try to load things into the agent automatically, like teleport
 # luckily, at Roadie we don't really need those certs in the agent because they get added to the kube config
 export TELEPORT_USE_LOCAL_SSH_AGENT=false
 
+# 1Password CLI uses Touch ID
+OP_BIOMETRIC_UNLOCK_ENABLED=true
+
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='emacs'
+elif [[ $(uname) == "Darwin" ]]; then
+  export EDITOR='emacs --no-desktop'
 else
   export EDITOR='emacs -n'
 fi
@@ -61,14 +63,8 @@ bindkey -M aherr "^[F" emacs-forward-word "^[f" emacs-forward-word
 bindkey -M aherr "^[B" emacs-backward-word "^[b" emacs-backward-word
 bindkey -A aherr main
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+export LESS='-R'
+alias ls='ls --color=auto'
 
 # Emacs aliases
 alias en='emacsclient -n'
@@ -78,7 +74,6 @@ alias ecn='emacsclient -n -c'
 # tmux
 alias tmux='TERM=xterm-256color tmux'
 
-alias ls='ls --color=auto'
 # Ruby aliases
 alias be='bundle exec'
 alias git=hub
@@ -86,20 +81,19 @@ alias git=hub
 # docker aliases
 alias drmi='docker rmi $(docker images -f dangling=true -q)'
 alias drmc='docker rm $(docker ps -a -f status=exited -q)'
+alias dc='docker compose'
 
 # colorize commands as they are typed
 # source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # shell options
-unsetopt share_history
-unsetopt correct_all
 setopt no_hup
 setopt extended_glob
 
+# Initialize completion
+autoload -U compinit; compinit
 # for scripts that use the bash `complete` function
 autoload -U +X bashcompinit && bashcompinit
-
-export LESS='-R'
 
 # iex
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 2097152"
@@ -111,16 +105,11 @@ eval "$(direnv hook zsh)"
 # enable shell integration
 source ~/.config/iterm2/iterm2_shell_integration.`basename $SHELL`
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# ZLE_RPROMPT_INDENT=0
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# starship prompt
 eval "$(starship init zsh)"
 
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
-
-# 1Password CLI uses Touch ID
-OP_BIOMETRIC_UNLOCK_ENABLED=true
 
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
@@ -132,5 +121,6 @@ alias cd='z'
 alias j='z'
 alias jj='zi'
 
-# Set up the Starship prompt
-eval "$(starship init zsh)"
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
