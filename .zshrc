@@ -44,6 +44,8 @@ export TELEPORT_USE_LOCAL_SSH_AGENT=false
 
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
+# 1Password plugins seem neat, but without the terraform one I'm stuck (at Focused)
+# source ${XDG_CONFIG_HOME:-${HOME}/.config}/op/plugins.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
