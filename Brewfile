@@ -28,7 +28,7 @@ brew "bzip2"
 brew "circleci"
 brew "cloudflared"
 brew "cmake"
-brew "colima", restart_service: :changed
+brew "colima"
 brew "coreutils"
 brew "curl"
 brew "direnv"
@@ -125,6 +125,7 @@ cask "font-symbols-only-nerd-font"
 cask "gcloud-cli"
 cask "ghostty"
 cask "google-chrome"
+cask "granola"
 cask "inkscape"
 cask "iterm2"
 cask "key-codes"
@@ -143,6 +144,7 @@ cask "openvpn-connect"
 cask "pop-app"
 cask "postman"
 cask "rocket"
+cask "session-manager-plugin"
 cask "signal"
 cask "slack"
 cask "spotify"
@@ -166,6 +168,7 @@ mas "Okta Verify", id: 490179405
 mas "Pages", id: 409201541
 mas "Super Agent", id: 1568262835
 mas "Vimlike", id: 1584519802
+mas "Windows App", id: 1295203466
 mas "Xcode", id: 497799835
 vscode "dbaeumer.vscode-eslint"
 vscode "dsznajder.es7-react-js-snippets"
