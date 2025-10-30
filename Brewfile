@@ -3,6 +3,7 @@ tap "derailed/k9s"
 tap "getsentry/tools"
 tap "hashicorp/tap"
 tap "heroku/brew"
+tap "sdkman/tap"
 brew "act"
 brew "xz"
 brew "allure"
@@ -24,7 +25,7 @@ brew "bzip2"
 brew "circleci"
 brew "cloudflared"
 brew "cmake"
-brew "colima"
+brew "colima", restart_service: :changed
 brew "coreutils"
 brew "curl"
 brew "direnv"
@@ -62,12 +63,14 @@ brew "libyaml"
 brew "links"
 brew "mas"
 brew "metals"
+brew "nano"
 brew "p7zip"
 brew "pandoc"
 brew "picocom"
 brew "pkgconf"
 brew "postgresql@12"
 brew "postgresql@15", link: true
+brew "prettier"
 brew "protobuf"
 brew "python@3.10"
 brew "python@3.9"
@@ -95,8 +98,10 @@ brew "getsentry/tools/sentry-cli"
 brew "hashicorp/tap/terraform"
 brew "hashicorp/tap/terraform-ls"
 brew "heroku/brew/heroku"
+brew "sdkman/tap/sdkman-cli"
 cask "1password"
 cask "1password-cli"
+cask "android-studio"
 cask "autodesk-fusion"
 cask "bambu-studio"
 cask "choosy"
@@ -136,6 +141,7 @@ cask "obsidian"
 cask "openvpn-connect"
 cask "pop-app"
 cask "postman"
+cask "resolutionator"
 cask "rocket"
 cask "session-manager-plugin"
 cask "signal"
@@ -152,12 +158,14 @@ cask "wireshark-app"
 cask "zoom"
 mas "1Password for Safari", id: 1569813296
 mas "Flycut", id: 442160987
+mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "Microsoft To Do", id: 1274495053
 mas "Numbers", id: 409203825
 mas "Okta Verify", id: 490179405
 mas "Pages", id: 409201541
 mas "Super Agent", id: 1568262835
+mas "uBlock Origin Lite", id: 6745342698
 mas "Vimlike", id: 1584519802
 mas "Windows App", id: 1295203466
 mas "Xcode", id: 497799835
