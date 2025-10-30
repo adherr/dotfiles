@@ -1,3 +1,6 @@
 [submodule ".config/emacs"]
 	path = .config/emacs
 	url = git@github.com:adherr/hand-rolled-emacs.git
+[submodule "dotfiles/PlexMono"]
+	path = dotfiles/PlexMono
+	url = git@github.com:liangjingkanji/PlexMono.git
