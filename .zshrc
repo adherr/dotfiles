@@ -6,6 +6,9 @@ path=( $(brew --prefix)/opt/scala@2.13/bin $(brew --prefix)/opt/mysql-client/bin
 path=( $path $HOME/.cargo/bin )
 # windsurf
 path=( $HOME/.codeium/windsurf/bin $path )
+# Android studio
+android_path=$HOME/Library/Android/sdk
+path=( $android_path/platform-tools $android_path/emulator $path )
 # my stuff
 path=( $HOME/bin $HOME/.local/bin $path )
 # asdf
