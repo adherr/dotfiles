@@ -31,3 +31,5 @@
 	conflictstyle = zdiff3
 [color]
 	ui = true
+[includeif "gitdir:/Users/andrewherr/src/focused/**/.git"]
+	path = ~/.gitconfig.focused

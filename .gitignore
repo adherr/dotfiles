@@ -12,6 +12,7 @@ sockets
 !/.docker/config.json
 
 !/.gitignore
+!/.gitconfig*
 !/Brewfile
 
 !/.zshrc
