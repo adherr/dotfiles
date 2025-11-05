@@ -33,3 +33,5 @@
 	ui = true
 [includeif "gitdir:/Users/andrewherr/src/focused/**/.git"]
 	path = ~/.gitconfig.focused
+[remote]
+	pushDefault = origin
