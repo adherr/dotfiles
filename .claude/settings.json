@@ -1,0 +1,71 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose exec mother bash -ic \"sbt 'test' 2>&1 | tee sbt-test-output.log\")",
+      "Bash(docker compose exec mother bash -ic \"sbt 'testOnly *' 2>&1 | tee sbt-test-output.log\")",
+      "Bash(docker compose exec mother bash -ic \"cat /tmp/sbt-test-output.log\")",
+      "Bash(git fetch:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(pbcopy)",
+      "Bash(./gradlew assembleExperimentalDebug:*)",
+      "Bash(./gradlew assembleDevDebug:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest:*)",
+      "Bash(pod *)",
+      "WebFetch(domain:dev-vista-web.drafthouse.com)",
+      "WebFetch(domain:developer.vista.co)",
+      "WebFetch(domain:buddy.works)",
+      "WebFetch(domain:docs.adyen.com)"
+    ],
+    "additionalDirectories": [
+      "/Users/andrewherr/src",
+      "/Users/andrewherr/Downloads",
+      "/Users/andrewherr/Screenshots"
+    ]
+  },
+  "model": "opus[1m]",
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "extraKnownMarketplaces": {
+    "cloudflare": {
+      "source": {
+        "source": "github",
+        "repo": "cloudflare/skills"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "network": {
+      "allowUnixSockets": [
+        "/Users/andrewherr/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+      ],
+      "allowMachLookup": [
+        "com.apple.pasteboard.1"
+      ]
+    },
+    "filesystem": {
+      "allowWrite": [
+        "/Users/andrewherr/.gradle",
+        "/Users/andrewherr/.cocoapods",
+        "/Users/andrewherr/Library/Caches/CocoaPods"
+      ]
+    },
+    "excludedCommands": [
+      "git commit *",
+      "gh *",
+      "./gradlew *",
+      "gradle *",
+      "docker compose exec mother bash -ic \"sbt 'test' 2>&1 | tee sbt-test-output.log\"",
+      "docker compose exec mother bash -ic \"sbt 'testOnly *' 2>&1 | tee sbt-test-output.log\"",
+      "docker compose exec mother bash -ic \"cat /tmp/sbt-test-output.log\""
+    ]
+  },
+  "effortLevel": "high",
+  "autoUpdatesChannel": "latest",
+  "promptSuggestionEnabled": false
+}

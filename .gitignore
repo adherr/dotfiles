@@ -2,23 +2,28 @@
 /*
 sockets
 
-# allowlist only
+# allowlist only. Top level directories are unignored in sections with their contents
 !/dotfiles
-!/.config
-!/.docker
-
-# I want the docker config for reference, although it might screw me up when I forget it
-/.docker/*
-!/.docker/config.json
-
 !/.gitignore
 !/.gitconfig*
 !/Brewfile
 
 !/.zshrc
 
-# allowlist inside .config as well
+# I want the docker config for reference, although it might screw me up when I forget it
+!/.docker
+/.docker/*
+!/.docker/config.json
+
+
+!/.config
 /.config/*
 !/.config/emacs
 !/.config/iterm2
 !/.config/starship.toml
+
+
+!/.claude
+/.claude/*
+!/.claude/settings.json
+!/.claude/CLAUDE.md
