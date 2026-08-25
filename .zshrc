@@ -175,3 +175,6 @@ export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
 
 # nix devenv
 eval "$(devenv hook zsh)"
+
+# mise
+eval "$(mise activate zsh)"
