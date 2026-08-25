@@ -94,6 +94,24 @@ alias en='emacsclient -n'
 alias ec='emacsclient -c'
 alias ecn='emacsclient -n -c'
 
+# Copy an image file to the macOS clipboard (so you can paste into Slack, etc.)
+# Source - https://stackoverflow.com/a/30578507
+# Posted by Mark Setchell, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-06-02, License - CC BY-SA 3.0
+pbcopyimage() {
+  local file=${1:?usage: pbcopyimage <image-file>}
+  file=${file:A}                       # resolve to an absolute path (AppleScript needs one)
+  [[ -r $file ]] || { print -u2 "pbcopyimage: cannot read: $file"; return 1 }
+  local class
+  case ${file:l} in
+    *.png)        class='«class PNGf»' ;;
+    *.gif)        class='GIF picture'  ;;
+    *.tif|*.tiff) class='TIFF picture' ;;
+    *)            class='JPEG picture' ;;   # jpg/jpeg and anything else
+  esac
+  osascript -e "set the clipboard to (read (POSIX file \"$file\") as $class)"
+}
+
 # tmux
 alias tmux='TERM=xterm-256color tmux'
 
