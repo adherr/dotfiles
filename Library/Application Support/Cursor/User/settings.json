@@ -1,0 +1,14 @@
+{
+    "window.commandCenter": true,
+    "workbench.colorTheme": "Default Light Modern",
+    "[kotlin]": {},
+    "files.watcherExclude": {
+        "**/.bloop": true,
+        "**/.metals": true
+    },
+    "files.autoSave": "onFocusChange",
+    "emacs-mcx.useMetaPrefixMacCmd": true,
+    "emacs-mcx.useMetaPrefixAlt": false,
+    "metals.startMcpServer": true,
+    "git.openRepositoryInParentFolders": "never"
+}

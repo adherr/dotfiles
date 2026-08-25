@@ -31,3 +31,15 @@ sockets
 !/.claude/settings.json
 !/.claude/CLAUDE.md
 !/.claude/keybindings.json
+
+
+!/Library
+/Library/*
+!/Library/Application Support
+/Library/Application Support/*
+!/Library/Application Support/Cursor
+/Library/Application Support/Cursor/*
+!/Library/Application Support/Cursor/User
+/Library/Application Support/Cursor/User/*
+!/Library/Application Support/Cursor/User/settings.json
+!/Library/Application Support/Cursor/User/keybindings.json
