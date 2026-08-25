@@ -64,7 +64,7 @@ bindkey "^[B" emacs-backward-word
 # above are enough for now.
 
 # Use 1password ssh-agent
-export SSH_AUTH_SOCK=~/.1password/agent.sock
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 # this breaks things that try to load things into the agent automatically, like teleport
 # luckily, at Roadie we don't really need those certs in the agent because they get added to the kube config
 export TELEPORT_USE_LOCAL_SSH_AGENT=false
