@@ -36,10 +36,32 @@ setopt INTERACTIVE_COMMENTS
 
 # Emacs keybindings
 bindkey -e
-# Use the up and down keys to navigate the history
-bindkey "\e[A" history-beginning-search-backward
-bindkey "\e[B" history-beginning-search-forward
-# Use Ctrl+Left and Ctrl+Right to move by words
+
+# Empty WORDCHARS: every non-alphanumeric char is a word boundary, so word motion
+# stops at each URI delimiter (/ . ? & = : # @ % ; - _ etc.).
+# zsh default is: *?_-.[]~=/&;!#$%^(){}<>
+WORDCHARS=''
+
+# Emacs-style word motion. zsh's emacs-forward-word lands at the START of the next
+# word (past the whitespace); true emacs M-f stops at the END of the current word,
+# before the whitespace. No built-in widget does that, so roll our own for M-f.
+# (M-b: emacs-backward-word already matches emacs, cursor at start of word.)
+_word_char() { [[ $1 == [[:alnum:]] ]] || [[ -n $1 && $WORDCHARS == *"$1"* ]] }
+forward-word-end() {                       # emacs M-f: to end of current/next word
+  local i=$(( CURSOR + 1 )) n=${#BUFFER}
+  while (( i <= n )); do _word_char "${BUFFER[i]}" && break; (( i++ )); done   # skip separators
+  while (( i <= n )); do _word_char "${BUFFER[i]}" || break; (( i++ )); done   # over the word
+  (( CURSOR = i - 1 ))
+}
+zle -N forward-word-end
+bindkey "^[f" forward-word-end
+bindkey "^[F" forward-word-end
+bindkey "^[b" emacs-backward-word
+bindkey "^[B" emacs-backward-word
+# TODO(maybe): emacs subword-mode style motion (split camelCase humps, e.g.
+# getHTTPResponse -> get|HTTP|Response). Needs custom forward/backward-subword
+# ZLE widgets (~30 lines, char-scanning); not built in. Punctuation boundaries
+# above are enough for now.
 
 # Use 1password ssh-agent
 export SSH_AUTH_SOCK=~/.1password/agent.sock
@@ -63,12 +85,6 @@ fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-# I expect emacs's concept of forward and backward word, make that happen here
-bindkey -N aherr emacs
-bindkey -M aherr "^[F" emacs-forward-word "^[f" emacs-forward-word
-bindkey -M aherr "^[B" emacs-backward-word "^[b" emacs-backward-word
-bindkey -A aherr main
 
 export LESS='-R'
 alias ls='ls --color=auto'
