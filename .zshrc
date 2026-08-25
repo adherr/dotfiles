@@ -134,12 +134,16 @@ eval "$(starship init zsh)"
 # heroku autocomplete setup
 HEROKU_AC_ZSH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/zsh_setup && test -f $HEROKU_AC_ZSH_SETUP_PATH && source $HEROKU_AC_ZSH_SETUP_PATH;
 
-# Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
+# Set up fzf key bindings and fuzzy completion.
+# 2>/dev/null silences fzf's harmless "can't change option: zle" — its init
+# snapshots/restores the whole $options array, and the read-only `zle` option
+# can't be reassigned. Widgets/bindings still load fine.
+source <(fzf --zsh) 2>/dev/null
 
-# Set up zoxide to move between folders efficiently
+# Set up zoxide to move between folders efficiently. Must be after starship
 eval "$(zoxide init zsh)"
-# suggested by bbatsov https://batsov.com/articles/2025/06/12/zoxide-tips-and-tricks/
+# _ZO_DOCTOR=0 moved to ~/.zshenv so it also reaches non-interactive subshells
+# zoxide suggested by bbatsov https://batsov.com/articles/2025/06/12/zoxide-tips-and-tricks/
 alias cd='z'
 alias j='z'
 alias jj='zi'
