@@ -32,6 +32,8 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 
+setopt INTERACTIVE_COMMENTS
+
 # Emacs keybindings
 bindkey -e
 # Use the up and down keys to navigate the history
