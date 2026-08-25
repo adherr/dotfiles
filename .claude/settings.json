@@ -1,33 +1,59 @@
 {
+  "env": {
+    "CLAUDE_CODE_TMPDIR": "/Users/andrewherr/src/claude-tmp",
+    "EDITOR": "emacsclient",
+    "VISUAL": "emacsclient",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "_ZO_DOCTOR": "0"
+  },
   "permissions": {
     "allow": [
-      "Bash(docker compose exec mother bash -ic \"sbt 'test' 2>&1 | tee sbt-test-output.log\")",
-      "Bash(docker compose exec mother bash -ic \"sbt 'testOnly *' 2>&1 | tee sbt-test-output.log\")",
-      "Bash(docker compose exec mother bash -ic \"cat /tmp/sbt-test-output.log\")",
       "Bash(git fetch:*)",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
       "Bash(pbcopy)",
       "Bash(./gradlew assembleExperimentalDebug:*)",
       "Bash(./gradlew assembleDevDebug:*)",
-      "Bash(npx tsc:*)",
-      "Bash(npx vitest:*)",
+      "Bash(npx *)",
       "Bash(pod *)",
+      "Bash(xcodebuild *)",
+      "Bash(direnv exec . xcodebuild *)",
+      "Bash(xcrun simctl *)",
+      "Bash(diff:*)",
       "WebFetch(domain:dev-vista-web.drafthouse.com)",
-      "WebFetch(domain:developer.vista.co)",
+      "WebFetch(domain:drafthouse.com)",
+      "WebFetch(domain:ecs-dev.drafthouse.com)",
+      "WebFetch(domain:docs.adyen.com)",
       "WebFetch(domain:buddy.works)",
-      "WebFetch(domain:docs.adyen.com)"
+      "WebFetch(domain:developers.cloudflare.com)",
+      "WebFetch(domain:developer.vista.co)",
+      "mcp__honeycomb__*"
     ],
+    "defaultMode": "auto",
     "additionalDirectories": [
       "/Users/andrewherr/src",
       "/Users/andrewherr/Downloads",
       "/Users/andrewherr/Screenshots"
     ]
   },
-  "model": "opus[1m]",
+  "model": "sonnet",
+  "workflowKeywordTriggerEnabled": false,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true,
+    "han@han": true,
+    "han-communication@han": true,
+    "han-core@han": true,
+    "han-documentation@han": true,
+    "han-research@han": true,
+    "han-planning@han": true,
+    "han-coding@han": true,
+    "han-github@han": true,
+    "han-reporting@han": true
   },
   "extraKnownMarketplaces": {
     "cloudflare": {
@@ -35,37 +61,72 @@
         "source": "github",
         "repo": "cloudflare/skills"
       }
+    },
+    "testdouble-skills-internal": {
+      "source": {
+        "source": "github",
+        "repo": "testdouble/skills-internal"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "han": {
+      "source": {
+        "source": "github",
+        "repo": "testdouble/han"
+      }
     }
   },
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
     "network": {
+      "allowedDomains": [
+        "*.drafthouse.com",
+        "*.honeycomb.io"
+      ],
       "allowUnixSockets": [
         "/Users/andrewherr/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
       ],
       "allowMachLookup": [
-        "com.apple.pasteboard.1"
+        "com.apple.pasteboard.1",
+        "com.apple.CoreSimulator.*"
       ]
     },
     "filesystem": {
       "allowWrite": [
         "/Users/andrewherr/.gradle",
         "/Users/andrewherr/.cocoapods",
-        "/Users/andrewherr/Library/Caches/CocoaPods"
+        "/Users/andrewherr/Library/Caches/CocoaPods",
+        "/Users/andrewherr/Library/Developer/Xcode/DerivedData",
+        "/Users/andrewherr/Library/Developer/Xcode/UserData",
+        "/Users/andrewherr/Library/Developer/CoreSimulator",
+        "/Users/andrewherr/Library/Caches/com.apple.dt.Xcode",
+        "/Users/andrewherr/Library/Caches/org.swift.swiftpm",
+        "/Users/andrewherr/Library/org.swift.swiftpm",
+        "/var/folders/2c/vp450myd30d5v71518brnpch0000gn/T"
       ]
     },
+    "enableWeakerNestedSandbox": true,
     "excludedCommands": [
       "git commit *",
+      "git push *",
       "gh *",
       "./gradlew *",
       "gradle *",
-      "docker compose exec mother bash -ic \"sbt 'test' 2>&1 | tee sbt-test-output.log\"",
-      "docker compose exec mother bash -ic \"sbt 'testOnly *' 2>&1 | tee sbt-test-output.log\"",
-      "docker compose exec mother bash -ic \"cat /tmp/sbt-test-output.log\""
+      "xcodebuild *",
+      "direnv exec . xcodebuild *"
     ]
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
+  "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "latest",
-  "promptSuggestionEnabled": false
+  "theme": "auto",
+  "editorMode": "normal",
+  "keybindingFlavor": "readline",
+  "autoCompactEnabled": false
 }

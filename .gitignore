@@ -27,3 +27,4 @@ sockets
 /.claude/*
 !/.claude/settings.json
 !/.claude/CLAUDE.md
+!/.claude/keybindings.json
