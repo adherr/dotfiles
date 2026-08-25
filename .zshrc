@@ -11,9 +11,6 @@ android_path=$HOME/Library/Android/sdk
 path=( $android_path/platform-tools $android_path/emulator $path )
 # my stuff
 path=( $HOME/bin $HOME/.local/bin $path )
-# asdf
-export ASDF_DATA_DIR="$HOME/.asdf"
-path=( ${ASDF_DATA_DIR:-$HOME/.asdf}/shims $path )
 
 # Enable persistent history
 HISTFILE=~/.zsh_history
@@ -117,7 +114,6 @@ alias tmux='TERM=xterm-256color tmux'
 
 # Ruby aliases
 alias be='bundle exec'
-alias git=hub
 
 # docker aliases
 alias drmi='docker rmi $(docker images -f dangling=true -q)'
@@ -168,10 +164,6 @@ alias jj='zi'
 
 # AWS ECR login (from Job at Focused)
 alias ecr_login='aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(aws sts get-caller-identity | jq -r ".Account").dkr.ecr.us-east-1.amazonaws.com'
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-[[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
 # nix devenv
 eval "$(devenv hook zsh)"
