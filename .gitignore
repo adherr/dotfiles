@@ -20,6 +20,11 @@ sockets
 !/.config
 /.config/*
 !/.config/emacs
+!/.config/git
+/.config/git/*
+!/.config/git/allowed_signers
+!/.config/git/ignore
+!/.config/iterm2
 /.config/iterm2/*
 !/.config/iterm2/com.googlecode.iterm2.plist
 !/.config/iterm2/iterm2_shell_integration.zsh
