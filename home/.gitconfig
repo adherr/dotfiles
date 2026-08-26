@@ -36,3 +36,5 @@
 	path = ~/.gitconfig.focused
 [remote]
 	pushDefault = origin
+[include]
+	path = ~/.gitconfig.local
