@@ -6,6 +6,7 @@ if ! emacsclient --eval '(+ 1 1)' >/dev/null 2>&1; then
   exit 1
 fi
 
+emacsclient --eval '(straight-pull-recipe-repositories)'
 emacsclient --eval '(straight-pull-all)'
 emacsclient --eval '(straight-check-all)'
 
