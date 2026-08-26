@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+defaults write com.tinyapp.TablePlus SUEnableAutomaticChecks -bool false
+defaults write com.tinyapp.TablePlus ViewSetting -dict-add IsDisableUpdateNotification -int 1
+echo "TablePlus auto-update disabled"

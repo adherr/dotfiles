@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+defaults import com.apple.symbolichotkeys "$repo/macos/symbolichotkeys.plist"
+defaults write -g com.apple.keyboard.fnState -bool true
+
+echo "macOS keyboard defaults applied. Log out and back in for symbolic hotkey changes to take effect."
+echo "Caps-lock-to-Escape is not handled here — see keyboard_shortcuts.md."

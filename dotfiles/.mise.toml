@@ -1,0 +1,31 @@
+[tasks.link]
+description = "Symlink dotfiles from ./home into $HOME"
+run = "bin/link"
+
+[tasks.unlink]
+description = "Remove dotfiles symlinks from $HOME"
+run = "bin/unlink"
+
+[tasks.tableplus-defaults]
+description = "Disable TablePlus auto-update checks"
+run = "bin/tableplus-defaults"
+
+[tasks.macos-defaults]
+description = "Restore macOS keyboard shortcut / function-key defaults"
+run = "bin/macos-defaults"
+
+[tasks."ssh-keys-new-machine"]
+description = "Generate per-machine SSH auth + signing keys in 1Password, register with GitHub"
+run = "bin/ssh-keys-new-machine"
+
+[tasks."emacs-packages-update"]
+description = "Pull and rebuild all straight.el packages (restart Emacs and verify before freezing)"
+run = "bin/emacs-packages-update"
+
+[tasks."emacs-packages-freeze"]
+description = "Pin straight.el package versions to the lockfile, once verified healthy"
+run = "bin/emacs-packages-freeze"
+
+[tasks."brew-upgrade"]
+description = "Update Homebrew and upgrade all outdated formulae/casks"
+run = "bin/brew-upgrade"

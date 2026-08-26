@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! emacsclient --eval '(+ 1 1)' >/dev/null 2>&1; then
+  echo "No Emacs daemon reachable. Start Emacs first, then re-run." >&2
+  exit 1
+fi
+
+emacsclient --eval '(straight-pull-all)'
+emacsclient --eval '(straight-check-all)'
+
+echo
+echo "Pulled and rebuilt. Now: restart Emacs, use it for a bit, check *Warnings* and *Messages* for anything real."
+echo "Once it looks healthy, run: mise run emacs-packages-freeze"

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+src="$repo/home"
+dst="${HOME:?}"
+
+link_rel() {
+  local rel="$1"
+  mkdir -p "$dst/$(dirname "$rel")"
+  ln -sfn "$src/$rel" "$dst/$rel"
+  echo "linked $rel"
+}
+
+# submodules are whole-directory symlinks, not walked into individually
+link_rel ".config/emacs"
+
+find "$src" -type f -not -path "$src/.config/emacs/*" | while IFS= read -r path; do
+  link_rel "${path#"$src"/}"
+done

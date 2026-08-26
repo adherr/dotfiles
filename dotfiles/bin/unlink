@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+src="$repo/home"
+dst="${HOME:?}"
+
+unlink_rel() {
+  local rel="$1"
+  local target="$dst/$rel"
+  if [ -L "$target" ]; then
+    rm "$target"
+    echo "unlinked $rel"
+  fi
+}
+
+unlink_rel ".config/emacs"
+
+find "$src" -type f -not -path "$src/.config/emacs/*" | while IFS= read -r path; do
+  unlink_rel "${path#"$src"/}"
+done

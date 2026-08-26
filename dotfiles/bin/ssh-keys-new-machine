@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+label="${1:-$(scutil --get ComputerName 2>/dev/null || hostname -s)}"
+
+if ! op whoami >/dev/null 2>&1; then
+  echo "1Password CLI isn't signed in." >&2
+  echo "Enable Settings > Developer > 'Integrate with 1Password CLI' in the 1Password app, then re-run this task." >&2
+  exit 1
+fi
+
+echo "==> Generating SSH auth key for '$label'"
+op item create --category="SSH Key" --title="SSH Key - $label (auth)" --ssh-generate-key=ed25519 >/dev/null
+auth_pub="$(op item get "SSH Key - $label (auth)" --fields label="public key" --reveal)"
+
+echo "==> Generating SSH signing key for '$label'"
+op item create --category="SSH Key" --title="SSH Key - $label (signing)" --ssh-generate-key=ed25519 >/dev/null
+signing_pub="$(op item get "SSH Key - $label (signing)" --fields label="public key" --reveal)"
+
+mkdir -p ~/.ssh
+printf '%s\n' "$signing_pub" > ~/.ssh/git_signing_key.pub
+chmod 600 ~/.ssh/git_signing_key.pub
+
+echo "==> Registering keys with GitHub"
+gh auth refresh -h github.com -s admin:public_key,admin:ssh_signing_key
+
+auth_keyfile="$(mktemp)"
+signing_keyfile="$(mktemp)"
+printf '%s\n' "$auth_pub" > "$auth_keyfile"
+printf '%s\n' "$signing_pub" > "$signing_keyfile"
+gh ssh-key add "$auth_keyfile" --type authentication --title "$label (auth)"
+gh ssh-key add "$signing_keyfile" --type signing --title "$label (signing)"
+rm -f "$auth_keyfile" "$signing_keyfile"
+
+echo
+echo "Done. Add a line to ~/.config/git/allowed_signers for whichever email(s) will sign from this machine:"
+echo "<email> namespaces=\"git\" $signing_pub"
