@@ -18,18 +18,6 @@ run = "bin/macos-defaults"
 description = "Generate per-machine SSH auth + signing keys in 1Password, register with GitHub"
 run = "bin/ssh-keys-new-machine"
 
-[tasks."emacs-packages-update"]
-description = "Pull and rebuild all straight.el packages (restart Emacs and verify before freezing)"
-run = "bin/emacs-packages-update"
-
-[tasks."emacs-packages-freeze"]
-description = "Pin straight.el package versions to the lockfile, once verified healthy"
-run = "bin/emacs-packages-freeze"
-
-[tasks."brew-upgrade"]
-description = "Update Homebrew and upgrade all outdated formulae/casks"
-run = "bin/brew-upgrade"
-
 [tasks."arch-install"]
 description = "Install pinned packages on Arch via paru (pacman.txt)"
 run = "bin/arch-install"

@@ -119,6 +119,7 @@ alias be='bundle exec'
 alias drmi='docker rmi $(docker images -f dangling=true -q)'
 alias drmc='docker rm $(docker ps -a -f status=exited -q)'
 alias dc='docker compose'
+alias brew-upgrade='brew update && brew upgrade --yes'
 
 # colorize commands as they are typed
 # source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -128,6 +129,7 @@ setopt no_hup
 setopt extended_glob
 
 # Initialize completion
+fpath+=("$HOME/.local/share/zsh/site-functions") # mise completion --install
 autoload -U compinit; compinit
 # for scripts that use the bash `complete` function
 autoload -U +X bashcompinit && bashcompinit

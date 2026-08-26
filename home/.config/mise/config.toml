@@ -1,3 +1,11 @@
 [tools]
 node = "26.7.0"
 ruby = "4.0.6"
+
+[tasks."emacs-packages-update"]
+description = "Pull and rebuild all straight.el packages (restart Emacs and verify before freezing)"
+run = "{{env.HOME}}/dotfiles/bin/emacs-packages-update"
+
+[tasks."emacs-packages-freeze"]
+description = "Pin straight.el package versions to the lockfile, once verified healthy"
+run = "{{env.HOME}}/dotfiles/bin/emacs-packages-freeze"
