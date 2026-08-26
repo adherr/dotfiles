@@ -27,7 +27,7 @@ The repo's git dir lives at `~/dotfiles/.git`. `~/.git` is a *file* containing `
 
 **Submodules stay submodules** — relocating the git dir doesn't affect them.
 
-**Machine-specific config** keeps using the pattern already in place for work vs. personal (`includeif.gitdir` pointing at `~/.gitconfig.focused`) rather than inventing a new mechanism.
+**Machine-specific config** keeps using the pattern already in place for work vs. personal (`includeif.gitdir` pointing at `~/.gitconfig.focused`) rather than inventing a new mechanism. The tracked `.gitconfig`'s base identity is the work one (`andrew.herr@testdouble.com`) with `includeif.gitdir` overriding to client identities per directory tree — but some whole machines (the old Intel MBP, the Arch box) are personal-only and need the *base* identity itself overridden, not a directory-scoped exception. Since the tracked file is symlinked identically everywhere, that override can't live in the repo — same reasoning as the untracked per-machine shell config. `.gitconfig` now unconditionally includes `~/.gitconfig.local` last (so it wins on scalar keys like `user.email`); git silently ignores missing includes, so machines without one (this Mac) are unaffected. Personal-only machines get a `~/.gitconfig.local` with just `[user] email = lobsterless@gmail.com`, written directly on that machine, never committed.
 
 ## Decisions
 
