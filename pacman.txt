@@ -1,0 +1,5 @@
+# One package per line, installed via `paru -S --needed`. Lines starting
+# with # and blank lines are ignored. Populate from the Arch box with:
+#   paru -Qqe > pacman.txt
+# then prune anything that's a dependency rather than something you
+# actually chose to install.

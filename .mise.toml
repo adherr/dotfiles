@@ -29,3 +29,7 @@ run = "bin/emacs-packages-freeze"
 [tasks."brew-upgrade"]
 description = "Update Homebrew and upgrade all outdated formulae/casks"
 run = "bin/brew-upgrade"
+
+[tasks."arch-install"]
+description = "Install pinned packages on Arch via paru (pacman.txt)"
+run = "bin/arch-install"

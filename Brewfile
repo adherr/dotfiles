@@ -16,8 +16,6 @@ brew "openssl@3"
 brew "sqlite"
 # Download with resuming and segmented downloading
 brew "aria2"
-# Extendable version manager with support for Ruby, Node.js, Erlang & more
-brew "asdf"
 # Spell checker with better logic than ispell
 brew "aspell"
 # Automatic configure script builder
