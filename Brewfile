@@ -1,7 +1,7 @@
+tap "andrewherr/tableplus", "/Users/andrewherr/dotfiles/homebrew-tableplus"
 tap "d12frosted/emacs-plus", trusted: true
 tap "hashicorp/tap", trusted: true
 tap "heroku/brew", trusted: true
-tap "andrewherr/tableplus", "~/dotfiles/homebrew-tableplus"
 # Run your GitHub Actions locally
 brew "act"
 # General-purpose data compression with high compression ratio
@@ -152,8 +152,8 @@ brew "picocom"
 brew "pkgconf"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
-# Object-relational database system (client + server; only used here for psql)
-brew "postgresql"
+# Object-relational database system
+brew "postgresql@18", link: true
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
 # Protocol buffers (Google's data interchange format)
@@ -172,6 +172,8 @@ brew "ranger"
 brew "redis"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Extremely fast Python linter, written in Rust
+brew "ruff"
 # Display and control your Android device
 brew "scrcpy"
 # Compressed read-only file system for Linux
@@ -192,6 +194,8 @@ brew "texlive"
 brew "tree"
 # Incremental parsing library
 brew "tree-sitter"
+# Extremely fast Python type checker, written in Rust
+brew "ty"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Cross-platform C++ GUI toolkit
@@ -230,8 +234,6 @@ cask "clickup"
 cask "cursor"
 # Universal database tool and SQL client
 cask "dbeaver-community"
-# Pinned build 520 — matches an existing paid license
-cask "andrewherr/tableplus/tableplus-licensed"
 # Voice and text chat software
 cask "discord"
 # App to build and share containerised applications and microservices
@@ -242,6 +244,8 @@ cask "dropbox"
 cask "d12frosted/emacs-plus/emacs-plus-app"
 # Web browser
 cask "firefox"
+# Clipboard manager for developers
+cask "flycut"
 cask "font-blex-mono-nerd-font"
 cask "font-fira-code"
 cask "font-fira-code-nerd-font"
@@ -284,6 +288,10 @@ cask "notion-mail"
 cask "notunes"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Identity verification provider
+cask "okta-verify"
+# AI usage tracker for Cursor, Claude Code, Codex, Copilot and more
+cask "openusage"
 # Client program for the OpenVPN Access Server
 cask "openvpn-connect"
 # Remote pair programming
@@ -306,6 +314,8 @@ cask "signal"
 cask "slack"
 # Music streaming service
 cask "spotify"
+# Pinned build 520 — matches an existing paid license; do not auto-update
+cask "andrewherr/tableplus/tableplus-licensed"
 # Web browser focusing on security
 cask "tor-browser"
 # Remote pair programming app
@@ -318,23 +328,21 @@ cask "visual-studio-code"
 cask "wezterm"
 # Native desktop client for WhatsApp
 cask "whatsapp"
+# Connect to Windows
+cask "windows-app"
 # Network protocol analyzer
 cask "wireshark-app"
 # Video communication and virtual meeting platform
 cask "zoom"
 mas "1Password for Safari", id: 1569813296
-mas "Flycut", id: 442160987
 mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "Microsoft To Do", id: 1274495053
 mas "Numbers", id: 409203825
-mas "Okta Verify", id: 490179405
 mas "Pages", id: 409201541
 mas "Super Agent", id: 1568262835
-mas "Tot", id: 1491071483
 mas "uBlock Origin Lite", id: 6745342698
 mas "Vimlike", id: 1584519802
-mas "Windows App", id: 1295203466
 mas "Xcode", id: 497799835
 vscode "dbaeumer.vscode-eslint"
 vscode "dsznajder.es7-react-js-snippets"
