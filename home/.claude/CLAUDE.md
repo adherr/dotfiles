@@ -30,3 +30,13 @@ Keep the description succinct; put deep-dive/planning context in a collapsed `<d
 # Code comments
 
 Default to no comment. Add one only when the code can't explain itself — a non-obvious "why", a gotcha, a workaround. When you do, keep it to one terse line; never a multi-line explanation of what the code does or how it got that way.
+
+# Copying an image file to the macOS clipboard
+
+Use `osascript` directly (a `pbcopyimage` function in `.zshrc` does the same thing, but sourcing `.zshrc` under the Bash tool doesn't work here) — needs `dangerouslyDisableSandbox: true`, it's just a local clipboard write:
+
+```
+osascript -e 'set the clipboard to (read (POSIX file "/absolute/path/to/file.jpg") as JPEG picture)'
+```
+
+Class name depends on file type: `JPEG picture`, `GIF picture`, `TIFF picture` — PNG is the odd one out, use `«class PNGf»`, not `PNG picture` (not a real class name).
