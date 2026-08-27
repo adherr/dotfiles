@@ -6,9 +6,39 @@ if ! emacsclient --eval '(+ 1 1)' >/dev/null 2>&1; then
   exit 1
 fi
 
-emacsclient --eval '(straight-pull-recipe-repositories)'
-emacsclient --eval '(straight-pull-all)'
-emacsclient --eval '(straight-check-all)'
+echo "This blocks your Emacs session for the duration (straight-pull-all alone takes a minute+)."
+echo "Run it when you can step away, not mid-work."
+echo
+
+emacsclient --eval '(straight-pull-recipe-repositories)' >/dev/null
+emacsclient --eval '(straight-pull-all)' >/dev/null
+emacsclient --eval '(straight-check-all)' >/dev/null
+
+echo "Checking native modules (vterm, ghostel)..."
+emacsclient --eval '
+(let (msgs)
+  (when (locate-library "vterm")
+    (condition-case err
+        (progn (vterm-module-compile) (push "vterm: module OK" msgs))
+      (error (push (format "vterm: compile FAILED: %s" (error-message-string err)) msgs))))
+  ;; load by absolute path, not require: ghostel-module-install.el exists as a
+  ;; separate build dir per package (ghostel/ghostel-comint/ghostel-compile all
+  ;; share the repo), and ghostel--module-directory resolves relative to
+  ;; load-file-name, so require via load-path could silently pick the wrong
+  ;; copy and report the real module as missing.
+  (when (load (expand-file-name "ghostel-module-install.el" (straight--build-dir "ghostel"))
+              t t)
+    (let* ((dir (ghostel--module-directory))
+           (ver (ghostel--read-module-sidecar-version dir)))
+      (if (and ver (not (version< ver ghostel--minimum-module-version)))
+          (push (format "ghostel: module current (%s)" ver) msgs)
+        (push (if (ghostel--download-module dir)
+                  "ghostel: module downloaded"
+                "ghostel: module download FAILED, run M-x ghostel-module-compile")
+              msgs))))
+  (mapconcat (function identity) (nreverse msgs) "\n"))' \
+  | sed -e 's/^"//' -e 's/"$//' -e 's/\\n/\n/g' \
+  || echo "Native module check failed; inspect manually before restarting."
 
 echo
 echo "Pulled and rebuilt. Now: restart Emacs, use it for a bit, check *Warnings* and *Messages* for anything real."
