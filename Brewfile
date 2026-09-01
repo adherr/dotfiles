@@ -82,6 +82,8 @@ brew "fd"
 brew "findutils"
 # Firebase command-line tools
 brew "firebase-cli"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
 # Configurable embedded Linux firmware update creator and runner
 brew "fwup"
 # Command-line fuzzy finder written in Go
