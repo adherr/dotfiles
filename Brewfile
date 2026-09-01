@@ -164,6 +164,8 @@ brew "python@3.10"
 brew "python@3.9"
 # Generic machine emulator and virtualizer
 brew "qemu"
+# Develop and deploy code with zero configuration
+brew "railway"
 # Bash completion for Rake
 brew "rake-completion"
 # File browser
