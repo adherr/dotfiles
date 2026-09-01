@@ -32,6 +32,9 @@ format = 'on [$symbol$branch]($style) '
 [git_metrics]
 disabled = false
 
+[nix_shell]
+symbol = '❄️ '
+
 [nodejs]
 format = '[$symbol($version )]($style)'
 
