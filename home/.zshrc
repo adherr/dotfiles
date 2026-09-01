@@ -120,6 +120,8 @@ alias drmi='docker rmi $(docker images -f dangling=true -q)'
 alias drmc='docker rm $(docker ps -a -f status=exited -q)'
 alias dc='docker compose'
 alias brew-upgrade='brew update && brew upgrade --yes'
+# npm globals are mise-managed, not brew-managed; keep them out of brew bundle dump
+export HOMEBREW_BUNDLE_DUMP_NO_NPM=1
 
 # colorize commands as they are typed
 # source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

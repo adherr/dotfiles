@@ -1,6 +1,9 @@
 [tools]
 node = "26.7.0"
 ruby = "4.0.6"
+# Required by Emacs' prettier.el, which requires the npm module directly
+# rather than shelling out to a `prettier` binary (see init.el).
+prettier = "3.9.6"
 
 [tasks."emacs-packages-update"]
 description = "Pull and rebuild all straight.el packages (restart Emacs and verify before freezing)"
