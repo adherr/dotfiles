@@ -232,8 +232,6 @@ cask "choosy"
 cask "chrysalis"
 # Terminal-based AI coding assistant
 cask "claude-code@latest"
-# Productivity platform for tasks, docs, goals, and chat
-cask "clickup"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # Universal database tool and SQL client
@@ -364,5 +362,3 @@ vscode "ms-toolsai.vscode-jupyter-cell-tags"
 vscode "ms-toolsai.vscode-jupyter-slideshow"
 vscode "ms-vscode-remote.remote-containers"
 vscode "waderyan.gitblame"
-go "cmd/go"
-go "cmd/gofmt"
