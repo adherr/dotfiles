@@ -22,7 +22,7 @@ if [ -n "$used_pct" ]; then
   else
     color='\033[0;32m'   # green
   fi
-  left+="$(printf "${color}ctx: ${used_pct}%% used\033[0m")"
+  left+="$(printf "${color}ctx: ${used_pct}%%\033[0m")"
 fi
 
 
@@ -31,44 +31,23 @@ if [ -n "$model" ]; then
   left+=" $(printf '\033[2m[%s]\033[0m' "$model")"
 fi
 
-# Claude session usage (% left + reset time), via `openusage claude`.
-# Read from a short-lived local cache so the statusline never blocks on the
-# CLI call; refresh the cache in the background when it goes stale.
-if command -v openusage > /dev/null 2>&1; then
-  usage_cache="${TMPDIR:-/tmp}/claude-statusline-openusage.json"
-  usage_cache_max_age=60
-  usage_cache_age=9999
-  if [ -f "$usage_cache" ]; then
-    usage_cache_age=$(( $(date +%s) - $(stat -f %m "$usage_cache" 2>/dev/null || echo 0) ))
+# Claude 5-hour rate limit usage (% used, counting up + reset time), from
+# the statusline payload itself - no external CLI/cache needed.
+five_hour_used=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+five_hour_resets=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+if [ -n "$five_hour_used" ] && [ -n "$five_hour_resets" ]; then
+  five_hour_used_int=${five_hour_used%.*}
+  if [ "$five_hour_used_int" -ge 80 ]; then
+    usage_color='\033[0;31m'   # red
+  elif [ "$five_hour_used_int" -ge 50 ]; then
+    usage_color='\033[0;33m'   # yellow
+  else
+    usage_color='\033[0;32m'   # green
   fi
-  if [ "$usage_cache_age" -ge "$usage_cache_max_age" ]; then
-    ( timeout 3 openusage claude > "${usage_cache}.tmp" 2>/dev/null && mv "${usage_cache}.tmp" "$usage_cache" ) > /dev/null 2>&1 &
-    disown 2>/dev/null
-  fi
-  usage_json=$(cat "$usage_cache" 2>/dev/null)
-  remaining=$(printf '%s' "$usage_json" | jq -r '.providers.claude.resources.session.remaining // empty')
-  resets_at=$(printf '%s' "$usage_json" | jq -r '.providers.claude.resources.session.resetsAt // empty')
-  if [ -n "$remaining" ] && [ -n "$resets_at" ]; then
-    remaining_int=${remaining%.*}
-    if [ "$remaining_int" -le 10 ]; then
-      usage_color='\033[0;31m'   # red
-    elif [ "$remaining_int" -le 30 ]; then
-      usage_color='\033[0;33m'   # yellow
-    else
-      usage_color='\033[0;32m'   # green
-    fi
-    resets_clean="${resets_at%%.*}"
-    case "$resets_clean" in *Z) ;; *) resets_clean="${resets_clean}Z" ;; esac
-    reset_epoch=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$resets_clean" "+%s" 2>/dev/null)
-    if [ -n "$reset_epoch" ]; then
-      reset_time=$(date -j -f "%s" "$reset_epoch" "+%-I:%M%p" 2>/dev/null | tr '[:upper:]' '[:lower:]')
-    else
-      reset_time=""
-    fi
-    left+=" $(printf "${usage_color}${remaining_int}%% left\033[0m")"
-    if [ -n "$reset_time" ]; then
-      left+="$(printf "\033[2m (resets ${reset_time})\033[0m")"
-    fi
+  reset_time=$(date -j -f "%s" "$five_hour_resets" "+%H:%M" 2>/dev/null)
+  left+=" $(printf "${usage_color}${five_hour_used_int}%%\033[0m")"
+  if [ -n "$reset_time" ]; then
+    left+="$(printf "\033[2m → ${reset_time}\033[0m")"
   fi
 fi
 
@@ -76,12 +55,12 @@ fi
 
 right=""
 
-# Git branch (yellow, truncated to 25 chars)
+# Git branch (yellow, truncated to 40 chars)
 git_dir="${cwd:-$(pwd)}"
 git_branch=""
 if git -C "$git_dir" rev-parse --git-dir > /dev/null 2>&1; then
   git_branch=$(git -C "$git_dir" -c gc.auto=0 symbolic-ref --short HEAD 2>/dev/null || git -C "$git_dir" -c gc.auto=0 rev-parse --short HEAD 2>/dev/null)
-  git_branch="${git_branch:0:25}"
+  git_branch="${git_branch:0:40}"
 fi
 if [ -n "$git_branch" ]; then
   right+="$(printf '\033[0;33mon %s\033[0m' "$git_branch")"
