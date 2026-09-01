@@ -176,6 +176,8 @@ brew "ripgrep"
 brew "ruff"
 # Display and control your Android device
 brew "scrcpy"
+# Autoformat shell script source code
+brew "shfmt"
 # Compressed read-only file system for Linux
 brew "squashfs"
 # Cross-shell prompt for astronauts
@@ -202,6 +204,8 @@ brew "uv"
 brew "wxwidgets"
 # Command-line tool to install and switch between multiple versions of Xcode
 brew "xcodes"
+# Programming language designed for robustness, optimality, and clarity
+brew "zig"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Fish shell like syntax highlighting for zsh
@@ -240,7 +244,7 @@ cask "discord"
 cask "docker-desktop"
 # Client for the Dropbox cloud storage service
 cask "dropbox"
-# GNU Emacs text editor with patches for macOS
+# GNU Emacs text editor with patches
 cask "d12frosted/emacs-plus/emacs-plus-app"
 # Web browser
 cask "firefox"
