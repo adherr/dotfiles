@@ -268,6 +268,8 @@ cask "ghostty"
 cask "google-chrome"
 # AI-powered notepad for meetings
 cask "granola"
+# Speech to text application
+cask "handy"
 # Vector graphics editor
 cask "inkscape"
 # Terminal emulator as alternative to Apple's Terminal app
@@ -280,6 +282,8 @@ cask "lens"
 cask "loom"
 # Shows the next meeting in the menu bar
 cask "meetingbar"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
 # Native app email client for Gmail
 cask "mimestream"
 # Reverse proxy, secure introspectable tunnels to localhost
