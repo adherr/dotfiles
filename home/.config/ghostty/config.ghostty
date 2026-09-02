@@ -1,3 +1,8 @@
 theme = Tomorrow
+font-family = Plex Mono
+adjust-cell-width = -9%
+cursor-style-blink = false
 command = /opt/homebrew/bin/fish
 macos-option-as-alt = true
+keybind = shift+page_up=scroll_page_up
+keybind = shift+page_down=scroll_page_down

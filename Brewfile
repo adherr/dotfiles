@@ -194,6 +194,8 @@ brew "switchaudio-osx"
 brew "teleport"
 # Free software distribution for the TeX typesetting system
 brew "texlive"
+# Terminal multiplexer
+brew "tmux"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Incremental parsing library
