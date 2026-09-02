@@ -6,5 +6,10 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 defaults import com.apple.symbolichotkeys "$repo/macos/symbolichotkeys.plist"
 defaults write -g com.apple.keyboard.fnState -bool true
 
+# Keep windows open when quitting an app (System Settings > Desktop & Dock >
+# "Close windows when quitting an application" unchecked). Needed for
+# iTerm2's session/scrollback restore to work.
+defaults write -g NSQuitAlwaysKeepsWindows -bool true
+
 echo "macOS keyboard defaults applied. Log out and back in for symbolic hotkey changes to take effect."
 echo "Caps-lock-to-Escape is not handled here — see keyboard_shortcuts.md."
