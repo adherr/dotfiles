@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Runs every macOS-only setup script in one shot. Each step is also runnable
+# on its own via its own `mise run` task, for when you only need one of them.
+bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+"$bin/macos-defaults"
+"$bin/tableplus-defaults"
+"$bin/ghostty-terminfo-install"
+
+# generates new credentials, so opt-in only
+if [ "${1:-}" = "--with-ssh-keys" ]; then
+  "$bin/ssh-keys-new-machine"
+fi
