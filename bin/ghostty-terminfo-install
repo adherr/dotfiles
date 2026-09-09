@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Ghostty ships its own compiled terminfo entry inside the app bundle, but
+# never installs it system- or user-wide. Without it, anything that opens a
+# raw tty under Ghostty (bypassing tmux, which aliases TERM itself) fails
+# with "Terminal type xterm-ghostty is not defined" — e.g. `emacsclient -t`.
+src="/Applications/Ghostty.app/Contents/Resources/terminfo"
+
+if [ ! -d "$src" ]; then
+  echo "Ghostty.app not found at the expected path; skipping" >&2
+  exit 1
+fi
+
+mkdir -p ~/.terminfo
+cp -R "$src/." ~/.terminfo/
+echo "installed xterm-ghostty terminfo into ~/.terminfo"

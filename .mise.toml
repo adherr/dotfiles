@@ -21,3 +21,7 @@ run = "bin/ssh-keys-new-machine"
 [tasks."arch-install"]
 description = "Install pinned packages on Arch via paru (pacman.txt)"
 run = "bin/arch-install"
+
+[tasks."ghostty-terminfo-install"]
+description = "Install Ghostty's terminfo entry into ~/.terminfo"
+run = "bin/ghostty-terminfo-install"
