@@ -23,19 +23,43 @@ emacsclient --eval '
       (error (push (format "vterm: compile FAILED: %s" (error-message-string err)) msgs))))
   ;; load by absolute path, not require: ghostel-module-install.el exists as a
   ;; separate build dir per package (ghostel/ghostel-comint/ghostel-compile all
-  ;; share the repo), and ghostel--module-directory resolves relative to
-  ;; load-file-name, so require via load-path could silently pick the wrong
-  ;; copy and report the real module as missing.
+  ;; share the repo). Avoid calling ghostel--module-directory here: it goes
+  ;; through locate-library on "ghostel", which just returns whichever of the
+  ;; three build dirs currently sits first on load-path (whichever package
+  ;; loaded last), not necessarily this one. Use the explicit build dir for
+  ;; the "ghostel" package as the single canonical copy, then symlink it into
+  ;; the other two below so all three see a module without downloading thrice.
   (when (load (expand-file-name "ghostel-module-install.el" (straight--build-dir "ghostel"))
               t t)
-    (let* ((dir (ghostel--module-directory))
+    (let* ((dir (straight--build-dir "ghostel"))
            (ver (ghostel--read-module-sidecar-version dir)))
       (if (and ver (not (version< ver ghostel--minimum-module-version)))
           (push (format "ghostel: module current (%s)" ver) msgs)
         (push (if (ghostel--download-module dir)
                   "ghostel: module downloaded"
                 "ghostel: module download FAILED, run M-x ghostel-module-compile")
-              msgs))))
+              msgs))
+      ;; ghostel-compile and ghostel-comint each build/load from their own
+      ;; straight build dir and never share the main ghostel copy, so each
+      ;; needs the module symlinked in too or they warn "Native module not
+      ;; found" even when the main ghostel package has a fresh one.
+      (let* ((mod-file (concat "ghostel-module" module-file-suffix))
+             (canonical-mod (expand-file-name mod-file dir))
+             (canonical-ver (expand-file-name "ghostel-module.version" dir)))
+        (when (file-exists-p canonical-mod)
+          (dolist (pkg (list "ghostel-compile" "ghostel-comint"))
+            (let* ((pkg-dir (straight--build-dir pkg))
+                   (pkg-mod (expand-file-name mod-file pkg-dir))
+                   (pkg-ver (expand-file-name "ghostel-module.version" pkg-dir)))
+              (when (file-directory-p pkg-dir)
+                (dolist (pair (list (cons canonical-mod pkg-mod)
+                                    (cons canonical-ver pkg-ver)))
+                  (let ((target (car pair)) (link (cdr pair)))
+                    (when (file-exists-p target)
+                      (unless (and (file-symlink-p link)
+                                  (string= (file-truename link) (file-truename target)))
+                        (make-symbolic-link target link t)))))
+                (push (format "%s: module symlinked from ghostel" pkg) msgs))))))))
   (mapconcat (function identity) (nreverse msgs) "\n"))' \
   | sed -e 's/^"//' -e 's/"$//' -e 's/\\n/\n/g' \
   || echo "Native module check failed; inspect manually before restarting."
