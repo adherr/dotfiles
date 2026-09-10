@@ -2,6 +2,10 @@
 
 When you need to read a dependency's source code, clone it to `~/src/deps/` instead of using WebFetch. Always clone at the same tag/version that the project depends on (e.g. `git clone --branch v1.2.3 --depth 1`). If the repo already exists at the right version, just read from it.
 
+# Avoid broad filesystem scans (TCC popups)
+
+Don't `find`/`grep`/`ls` rooted at `/` or `~` — triggers macOS TCC prompts. Scope to a known dir (project root, `~/src`, etc.).
+
 # Markdown
 
 Don't hard-wrap prose in markdown files. Each paragraph or list item is one line; let the editor soft-wrap.
@@ -30,6 +34,10 @@ Keep the description succinct; put deep-dive/planning context in a collapsed `<d
 # Code comments
 
 Default to no comment. Add one only when the code can't explain itself — a non-obvious "why", a gotcha, a workaround. When you do, keep it to one terse line; never a multi-line explanation of what the code does or how it got that way.
+
+# No end-of-turn recaps
+
+Don't append a summary ("what changed / what's next") after finishing a turn. I don't read them. If there's something genuinely new I need to know or decide, say it plainly — don't wrap routine completions in a recap.
 
 # Copying an image file to the macOS clipboard
 
