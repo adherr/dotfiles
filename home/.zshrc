@@ -136,6 +136,10 @@ autoload -U compinit; compinit
 # for scripts that use the bash `complete` function
 autoload -U +X bashcompinit && bashcompinit
 
+# Orderless-ish completion: case-insensitive, then match anywhere in the word
+# (not just as a prefix) — mirrors fish's default fuzzy completion behavior.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 # iex
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 2097152"
 
