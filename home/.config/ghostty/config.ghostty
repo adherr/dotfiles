@@ -1,5 +1,5 @@
 theme = Tomorrow
-font-family = Plex Mono
+font-family = BlexMono Nerd Font Mono
 adjust-cell-width = -9%
 cursor-style-blink = false
 command = /opt/homebrew/bin/fish
