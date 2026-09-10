@@ -12,7 +12,7 @@ cask "tableplus-licensed" do
 
   app "TablePlus.app"
 
-  postflight do
+  postflight_steps do
     system_command "/usr/bin/defaults",
                    args: ["write", "com.tinyapp.TablePlus", "SUEnableAutomaticChecks", "-bool", "false"]
     system_command "/usr/bin/defaults",
