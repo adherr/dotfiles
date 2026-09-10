@@ -274,6 +274,8 @@ cask "handy"
 cask "inkscape"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
+# Keyboard customiser
+cask "karabiner-elements"
 # Display key code, unicode value and modifier keys state for any key combination
 cask "key-codes"
 # Kubernetes IDE
