@@ -106,8 +106,6 @@ brew "gnu-tar"
 brew "gnupg"
 # Directory/file & DNS busting tool written in Go
 brew "gobuster"
-# Validating, recursive, caching DNS resolver
-brew "unbound"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # GNU grep, egrep and fgrep
@@ -134,6 +132,8 @@ brew "libmagic"
 brew "libsodium"
 # Lynx-like WWW browser that supports tables, menus, etc.
 brew "links"
+# LLM inference in C/C++
+brew "llama.cpp"
 # Mac App Store command-line interface
 brew "mas"
 # Polyglot runtime manager (asdf rust clone)
@@ -202,6 +202,8 @@ brew "tree"
 brew "tree-sitter"
 # Extremely fast Python type checker, written in Rust
 brew "ty"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Cross-platform C++ GUI toolkit
@@ -294,8 +296,6 @@ cask "ngrok"
 cask "notion"
 # Calendar for professionals and teams
 cask "notion-calendar"
-# Email client integrated with Notion workspace
-cask "notion-mail"
 # Simple application that will prevent iTunes or Apple Music from launching
 cask "notunes"
 # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -326,8 +326,6 @@ cask "signal"
 cask "slack"
 # Music streaming service
 cask "spotify"
-# Pinned build 520 — matches an existing paid license; do not auto-update
-cask "andrewherr/tableplus/tableplus-licensed"
 # Web browser focusing on security
 cask "tor-browser"
 # Remote pair programming app
