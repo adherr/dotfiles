@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Enables the CUPS web admin interface at http://localhost:631
+cupsctl WebInterface=yes
+
+echo "CUPS web admin interface enabled: http://localhost:631"
+
+# Network printers, added by device URI. These are old enough (HP LaserJet
+# 4250, etc.) that driverless IPP Everywhere isn't reliable — trout's IPP
+# service (port 631) rejects every IPP version outright — so each is set up
+# with a CUPS "Generic" driver instead.
+declare -A printers=(
+  [trout]="socket://192.168.1.5:9100"
+  [rainbow_trout]="lpd://192.168.1.99/"
+)
+
+# trout uses PCL rather than PostScript: printing PDFs from Firefox to the
+# PostScript driver reliably hit "limitcheck / offending command image" —
+# the 4250's PS interpreter running out of memory rasterizing images. PCL
+# rasterizes on the Mac side via CUPS instead of on the printer, avoiding it.
+declare -A drivers=(
+  [trout]="drv:///sample.drv/generpcl.ppd"
+  [rainbow_trout]="drv:///sample.drv/generic.ppd"
+)
+
+for name in "${!printers[@]}"; do
+  uri="${printers[$name]}"
+  driver="${drivers[$name]}"
+  lpadmin -p "$name" -E -v "$uri" -m "$driver" -D "$name"
+  # lpadmin -E enables the printer but doesn't clear a "rejecting jobs" state
+  cupsaccept "$name"
+  echo "Printer added: $name ($uri)"
+done

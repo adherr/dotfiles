@@ -8,6 +8,7 @@ bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$bin/macos-defaults"
 "$bin/tableplus-defaults"
 "$bin/ghostty-terminfo-install"
+"$bin/cups-defaults"
 
 # generates new credentials, so opt-in only
 if [ "${1:-}" = "--with-ssh-keys" ]; then
