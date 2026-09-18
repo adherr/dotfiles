@@ -35,10 +35,6 @@ Keep the description succinct; put deep-dive/planning context in a collapsed `<d
 
 Default to no comment. Add one only when the code can't explain itself — a non-obvious "why", a gotcha, a workaround. When you do, keep it to one terse line; never a multi-line explanation of what the code does or how it got that way.
 
-# No end-of-turn recaps
-
-Don't append a summary ("what changed / what's next") after finishing a turn. I don't read them. If there's something genuinely new I need to know or decide, say it plainly — don't wrap routine completions in a recap.
-
 # Copying an image file to the macOS clipboard
 
 Use `osascript` directly (a `pbcopyimage` function in `.zshrc` does the same thing, but sourcing `.zshrc` under the Bash tool doesn't work here) — needs `dangerouslyDisableSandbox: true`, it's just a local clipboard write:
