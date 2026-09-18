@@ -14,52 +14,31 @@ emacsclient --eval '(straight-pull-recipe-repositories)' >/dev/null
 emacsclient --eval '(straight-pull-all)' >/dev/null
 emacsclient --eval '(straight-check-all)' >/dev/null
 
-echo "Checking native modules (vterm, ghostel)..."
+echo "Checking native module (ghostel)..."
 emacsclient --eval '
 (let (msgs)
-  (when (locate-library "vterm")
-    (condition-case err
-        (progn (vterm-module-compile) (push "vterm: module OK" msgs))
-      (error (push (format "vterm: compile FAILED: %s" (error-message-string err)) msgs))))
   ;; load by absolute path, not require: ghostel-module-install.el exists as a
   ;; separate build dir per package (ghostel/ghostel-comint/ghostel-compile all
-  ;; share the repo). Avoid calling ghostel--module-directory here: it goes
-  ;; through locate-library on "ghostel", which just returns whichever of the
-  ;; three build dirs currently sits first on load-path (whichever package
-  ;; loaded last), not necessarily this one. Use the explicit build dir for
-  ;; the "ghostel" package as the single canonical copy, then symlink it into
-  ;; the other two below so all three see a module without downloading thrice.
+  ;; share the repo) but they are byte-identical copies. ghostel-module-directory
+  ;; is pinned in init.el to XDG_CACHE_HOME, outside straight build tree, so
+  ;; all three packages already resolve to one shared module location - no
+  ;; per-package symlinking needed, and nothing here should touch straight
+  ;; build dirs (a straight rebuild wipes them, which is the bug that pinning
+  ;; this directory fixed).
   (when (load (expand-file-name "ghostel-module-install.el" (straight--build-dir "ghostel"))
               t t)
-    (let* ((dir (straight--build-dir "ghostel"))
+    (let* ((dir (ghostel--module-directory))
            (ver (ghostel--read-module-sidecar-version dir)))
       (if (and ver (not (version< ver ghostel--minimum-module-version)))
           (push (format "ghostel: module current (%s)" ver) msgs)
+        ;; PARKED as of 2026-09-16: Homebrew zig 0.16.0 fails to build the
+        ;; vendored stb_image.c against the current Xcode SDK
+        ;; (-Wnullability-completeness), so download instead of compile
+        ;; until that is fixed upstream. See init.el for the flip-back note.
         (push (if (ghostel--download-module dir)
                   "ghostel: module downloaded"
                 "ghostel: module download FAILED, run M-x ghostel-module-compile")
-              msgs))
-      ;; ghostel-compile and ghostel-comint each build/load from their own
-      ;; straight build dir and never share the main ghostel copy, so each
-      ;; needs the module symlinked in too or they warn "Native module not
-      ;; found" even when the main ghostel package has a fresh one.
-      (let* ((mod-file (concat "ghostel-module" module-file-suffix))
-             (canonical-mod (expand-file-name mod-file dir))
-             (canonical-ver (expand-file-name "ghostel-module.version" dir)))
-        (when (file-exists-p canonical-mod)
-          (dolist (pkg (list "ghostel-compile" "ghostel-comint"))
-            (let* ((pkg-dir (straight--build-dir pkg))
-                   (pkg-mod (expand-file-name mod-file pkg-dir))
-                   (pkg-ver (expand-file-name "ghostel-module.version" pkg-dir)))
-              (when (file-directory-p pkg-dir)
-                (dolist (pair (list (cons canonical-mod pkg-mod)
-                                    (cons canonical-ver pkg-ver)))
-                  (let ((target (car pair)) (link (cdr pair)))
-                    (when (file-exists-p target)
-                      (unless (and (file-symlink-p link)
-                                  (string= (file-truename link) (file-truename target)))
-                        (make-symbolic-link target link t)))))
-                (push (format "%s: module symlinked from ghostel" pkg) msgs))))))))
+              msgs))))
   (mapconcat (function identity) (nreverse msgs) "\n"))' \
   | sed -e 's/^"//' -e 's/"$//' -e 's/\\n/\n/g' \
   || echo "Native module check failed; inspect manually before restarting."
