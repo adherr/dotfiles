@@ -11,5 +11,10 @@ defaults write -g com.apple.keyboard.fnState -bool true
 # iTerm2's session/scrollback restore to work.
 defaults write -g NSQuitAlwaysKeepsWindows -bool true
 
+# Read iTerm2 prefs from the linked ~/.config/iterm2 plist (quit iTerm2 first,
+# or it writes its cached prefs back over these).
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$HOME/.config/iterm2"
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
 echo "macOS keyboard defaults applied. Log out and back in for symbolic hotkey changes to take effect."
 echo "Caps-lock-to-Escape is not handled here — see keyboard_shortcuts.md."

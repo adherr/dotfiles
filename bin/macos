@@ -8,9 +8,19 @@ bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$bin/macos-defaults"
 "$bin/tableplus-defaults"
 "$bin/ghostty-terminfo-install"
-"$bin/cups-defaults"
+ssh_keys=0
+printers=""
+for arg in "$@"; do
+  case "$arg" in
+    --with-ssh-keys) ssh_keys=1 ;;
+    --with-printers) printers="--with-printers" ;;
+  esac
+done
+
+# shellcheck disable=SC2086
+"$bin/cups-defaults" $printers
 
 # generates new credentials, so opt-in only
-if [ "${1:-}" = "--with-ssh-keys" ]; then
+if [ "$ssh_keys" = 1 ]; then
   "$bin/ssh-keys-new-machine"
 fi

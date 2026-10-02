@@ -13,3 +13,6 @@ run = "{{env.HOME}}/dotfiles/bin/emacs-packages-update"
 [tasks."emacs-packages-freeze"]
 description = "Pin straight.el package versions to the lockfile, once verified healthy"
 run = "{{env.HOME}}/dotfiles/bin/emacs-packages-freeze"
+
+[settings]
+experimental = true

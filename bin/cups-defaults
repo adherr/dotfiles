@@ -6,6 +6,12 @@ cupsctl WebInterface=yes
 
 echo "CUPS web admin interface enabled: http://localhost:631"
 
+# home-LAN printers; meaningless (and noisy to endpoint agents) elsewhere
+if [ "${1:-}" != "--with-printers" ]; then
+  echo "Skipping network printers (pass --with-printers to add them)"
+  exit 0
+fi
+
 # Network printers, added by device URI. These are old enough (HP LaserJet
 # 4250, etc.) that driverless IPP Everywhere isn't reliable — trout's IPP
 # service (port 631) rejects every IPP version outright — so each is set up

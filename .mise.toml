@@ -7,7 +7,7 @@ description = "Remove dotfiles symlinks from $HOME"
 run = "bin/unlink"
 
 [tasks.macos]
-description = "Run every macOS-only setup script (macos-defaults, tableplus-defaults, ghostty-terminfo-install, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine"
+description = "Run every macOS-only setup script (macos-defaults, tableplus-defaults, ghostty-terminfo-install, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
 run = "bin/macos"
 
 [tasks.tableplus-defaults]
@@ -19,7 +19,7 @@ description = "Restore macOS keyboard shortcut / function-key defaults"
 run = "bin/macos-defaults"
 
 [tasks."cups-defaults"]
-description = "Enable the CUPS web admin interface (http://localhost:631)"
+description = "Enable the CUPS web admin interface (http://localhost:631). Pass --with-printers to also add the home-LAN network printers"
 run = "bin/cups-defaults"
 
 [tasks."ssh-keys-new-machine"]
