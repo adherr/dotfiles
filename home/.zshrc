@@ -144,7 +144,7 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 export ERL_AFLAGS="-kernel shell_history enabled -kernel shell_history_file_bytes 2097152"
 
 # Direnv
-eval "$(direnv hook zsh)"
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"
 
 # iTerm2 on mac OS
 # enable shell integration
@@ -174,7 +174,7 @@ alias jj='zi'
 alias ecr_login='aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(aws sts get-caller-identity | jq -r ".Account").dkr.ecr.us-east-1.amazonaws.com'
 
 # nix devenv
-eval "$(devenv hook zsh)"
+command -v devenv >/dev/null && eval "$(devenv hook zsh)"
 
 # mise
 eval "$(mise activate zsh)"

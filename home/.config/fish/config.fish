@@ -15,8 +15,8 @@ if status is-interactive
     fish_add_path -g $HOME/bin $HOME/.local/bin $HOME/.docker/bin
 
     starship init fish | source
-    direnv hook fish | source
-    devenv hook fish | source
+    type -q direnv; and direnv hook fish | source
+    type -q devenv; and devenv hook fish | source
     mise activate fish | source
     zoxide init fish --cmd cd | source
     fzf --fish | source
