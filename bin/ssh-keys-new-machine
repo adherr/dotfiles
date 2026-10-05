@@ -48,22 +48,22 @@ if [ "$backend" = op ]; then
     exit 1
   fi
 
-  echo "==> Generating SSH auth key for '$label' in 1Password"
-  op item create --category="SSH Key" --title="SSH Key - $label (auth)" --ssh-generate-key=ed25519 >/dev/null
-  auth_pub="$(op item get "SSH Key - $label (auth)" --fields label="public key" --reveal)"
-
-  echo "==> Generating SSH signing key for '$label' in 1Password"
-  op item create --category="SSH Key" --title="SSH Key - $label (signing)" --ssh-generate-key=ed25519 >/dev/null
-  signing_pub="$(op item get "SSH Key - $label (signing)" --fields label="public key" --reveal)"
+  op_key() {
+    local title="SSH Key - $label ($1)"
+    if op item get "$title" >/dev/null 2>&1; then
+      echo "==> Reusing existing 1Password item '$title'" >&2
+    else
+      echo "==> Generating '$title' in 1Password" >&2
+      op item create --category="SSH Key" --title="$title" --ssh-generate-key=ed25519 >/dev/null
+    fi
+    op item get "$title" --fields label="public key" --reveal
+  }
+  auth_pub="$(op_key auth)"
+  signing_pub="$(op_key signing)"
 
   printf '%s\n' "$signing_pub" > "$signing_key.pub"
   chmod 600 "$signing_key.pub"
 else
-  if [ -e "$auth_key" ] || [ -e "$signing_key" ]; then
-    echo "$auth_key or $signing_key already exists; move them aside first." >&2
-    exit 1
-  fi
-
   askpass="$(mktemp)"
   trap 'rm -f "$askpass"' EXIT
   printf '#!/bin/sh\nprintf %%s "$KEY_PASSPHRASE"\n' > "$askpass"
@@ -71,6 +71,10 @@ else
 
   generate() {
     local file="$1" comment="$2" pass
+    if [ -e "$file" ]; then
+      echo "==> Reusing existing $file"
+      return
+    fi
     pass="$(openssl rand -base64 24)"
     ssh-keygen -q -t ed25519 -N "$pass" -C "$comment" -f "$file"
     KEY_PASSPHRASE="$pass" SSH_ASKPASS="$askpass" SSH_ASKPASS_REQUIRE=force \
@@ -86,10 +90,12 @@ else
   auth_pub="$(cat "$auth_key.pub")"
   signing_pub="$(cat "$signing_key.pub")"
 
-  echo
-  echo "Save these passphrases in LastPass now (the macOS keychain holds the only other copy):"
-  printf '  %s\n' "${PASSPHRASES[@]}"
-  echo
+  if [ "${#PASSPHRASES[@]}" -gt 0 ]; then
+    echo
+    echo "Save these passphrases in LastPass now (the macOS keychain holds the only other copy):"
+    printf '  %s\n' "${PASSPHRASES[@]}"
+    echo
+  fi
 
   if [ ! -e ~/.ssh/config ]; then
     cat > ~/.ssh/config <<EOF
@@ -106,17 +112,25 @@ fi
 echo "==> Registering keys with GitHub"
 gh auth refresh -h github.com -s admin:public_key,admin:ssh_signing_key
 
-auth_keyfile="$(mktemp)"
-signing_keyfile="$(mktemp)"
-printf '%s\n' "$auth_pub" > "$auth_keyfile"
-printf '%s\n' "$signing_pub" > "$signing_keyfile"
-gh ssh-key add "$auth_keyfile" --type authentication --title "$label (auth)"
-gh ssh-key add "$signing_keyfile" --type signing --title "$label (signing)"
-rm -f "$auth_keyfile" "$signing_keyfile"
+register_key() {
+  local pub="$1" type="$2" endpoint="$3" kind="$4" keyfile
+  # compare type + base64 body; GitHub drops the trailing comment
+  if gh api "$endpoint" --paginate --jq '.[].key' | grep -qxF "$(printf '%s' "$pub" | awk '{print $1" "$2}')"; then
+    echo "$type key already registered with GitHub; skipping"
+    return
+  fi
+  keyfile="$(mktemp)"
+  printf '%s\n' "$pub" > "$keyfile"
+  gh ssh-key add "$keyfile" --type "$type" --title "$label ($kind)"
+  rm -f "$keyfile"
+}
+register_key "$auth_pub" authentication user/keys auth
+register_key "$signing_pub" signing user/ssh_signing_keys signing
 
 allowed_signers=~/.config/git/allowed_signers
 [ -L "$allowed_signers" ] && rm -f "$allowed_signers"
-printf '%s namespaces="git" %s\n' "$email" "$signing_pub" >> "$allowed_signers"
+signer_line="$(printf '%s namespaces="git" %s' "$email" "$signing_pub")"
+grep -qxF "$signer_line" "$allowed_signers" 2>/dev/null || printf '%s\n' "$signer_line" >> "$allowed_signers"
 
 if [ -e ~/.gitconfig.local ]; then
   echo "~/.gitconfig.local already exists; not overwriting. It needs user.email = $email"
