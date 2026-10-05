@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Installs the ligatured PlexMono (PlexMono submodule) into ~/Library/Fonts.
+# Copied, not symlinked: CoreText/Font Book are unreliable with symlinked fonts.
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+src="$repo/PlexMono/font"
+dst="$HOME/Library/Fonts"
+
+if [ ! -d "$src" ]; then
+  git -C "$repo" submodule update --init PlexMono
+fi
+
+mkdir -p "$dst"
+cp -f "$src"/*.otf "$dst"/
+echo "installed $(find "$src" -name '*.otf' | wc -l | tr -d ' ') PlexMono fonts into $dst"

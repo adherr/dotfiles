@@ -8,6 +8,7 @@ bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$bin/macos-defaults"
 "$bin/tableplus-defaults"
 "$bin/ghostty-terminfo-install"
+"$bin/plexmono-install"
 ssh_keys=0
 printers=""
 for arg in "$@"; do

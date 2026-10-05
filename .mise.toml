@@ -7,7 +7,7 @@ description = "Remove dotfiles symlinks from $HOME"
 run = "bin/unlink"
 
 [tasks.macos]
-description = "Run every macOS-only setup script (macos-defaults, tableplus-defaults, ghostty-terminfo-install, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
+description = "Run every macOS-only setup script (macos-defaults, tableplus-defaults, ghostty-terminfo-install, plexmono-install, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
 run = "bin/macos"
 
 [tasks.tableplus-defaults]
@@ -25,6 +25,10 @@ run = "bin/cups-defaults"
 [tasks."ssh-keys-new-machine"]
 description = "Generate per-machine SSH auth + signing keys (1Password if available, else local passphrase-protected keys in the macOS keychain), register with GitHub, write ~/.gitconfig.local"
 run = "bin/ssh-keys-new-machine"
+
+[tasks."plexmono-install"]
+description = "Install the ligatured PlexMono font (PlexMono submodule) into ~/Library/Fonts"
+run = "bin/plexmono-install"
 
 [tasks."arch-install"]
 description = "Install pinned packages on Arch via paru (pacman.txt)"
