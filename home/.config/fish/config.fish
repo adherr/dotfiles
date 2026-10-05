@@ -14,6 +14,13 @@ set -g fish_color_autosuggestion 969896 --italics
 if status is-interactive
     fish_add_path -g $HOME/bin $HOME/.local/bin $HOME/.docker/bin
 
+    set -l op_sock ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+    if test -S $op_sock
+        set -gx SSH_AUTH_SOCK $op_sock
+    else
+        ssh-add -l >/dev/null 2>&1; or ssh-add --apple-load-keychain -q 2>/dev/null
+    end
+
     starship init fish | source
     type -q direnv; and direnv hook fish | source
     type -q devenv; and devenv hook fish | source

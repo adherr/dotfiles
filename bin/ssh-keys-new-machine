@@ -1,25 +1,107 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-label="${1:-$(scutil --get ComputerName 2>/dev/null || hostname -s)}"
+usage() {
+  echo "usage: ssh-keys-new-machine [--backend op|local] [--email EMAIL] [LABEL]" >&2
+  exit 2
+}
 
-if ! op whoami >/dev/null 2>&1; then
-  echo "1Password CLI isn't signed in." >&2
-  echo "Enable Settings > Developer > 'Integrate with 1Password CLI' in the 1Password app, then re-run this task." >&2
-  exit 1
+backend=""
+email=""
+label=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --backend) backend="${2:-}"; shift 2 ;;
+    --email) email="${2:-}"; shift 2 ;;
+    -h|--help) usage ;;
+    -*) usage ;;
+    *) label="$1"; shift ;;
+  esac
+done
+label="${label:-$(scutil --get ComputerName 2>/dev/null || hostname -s)}"
+
+if [ -z "$backend" ]; then
+  if command -v op >/dev/null 2>&1 && op whoami >/dev/null 2>&1; then
+    backend=op
+  else
+    backend=local
+  fi
 fi
+[ "$backend" = op ] || [ "$backend" = local ] || usage
 
-echo "==> Generating SSH auth key for '$label'"
-op item create --category="SSH Key" --title="SSH Key - $label (auth)" --ssh-generate-key=ed25519 >/dev/null
-auth_pub="$(op item get "SSH Key - $label (auth)" --fields label="public key" --reveal)"
+if [ -z "$email" ]; then
+  read -rp "Commit email for this machine: " email
+fi
+[ -n "$email" ] || usage
 
-echo "==> Generating SSH signing key for '$label'"
-op item create --category="SSH Key" --title="SSH Key - $label (signing)" --ssh-generate-key=ed25519 >/dev/null
-signing_pub="$(op item get "SSH Key - $label (signing)" --fields label="public key" --reveal)"
+gh auth status -h github.com >/dev/null 2>&1 || { echo "gh isn't logged in; run 'gh auth login' first." >&2; exit 1; }
 
-mkdir -p ~/.ssh
-printf '%s\n' "$signing_pub" > ~/.ssh/git_signing_key.pub
-chmod 600 ~/.ssh/git_signing_key.pub
+mkdir -p ~/.ssh ~/.config/git
+chmod 700 ~/.ssh
+signing_key=~/.ssh/git_signing_key
+auth_key=~/.ssh/id_ed25519
+
+if [ "$backend" = op ]; then
+  if ! op whoami >/dev/null 2>&1; then
+    echo "1Password CLI isn't signed in." >&2
+    echo "Enable Settings > Developer > 'Integrate with 1Password CLI' in the 1Password app, then re-run this task." >&2
+    exit 1
+  fi
+
+  echo "==> Generating SSH auth key for '$label' in 1Password"
+  op item create --category="SSH Key" --title="SSH Key - $label (auth)" --ssh-generate-key=ed25519 >/dev/null
+  auth_pub="$(op item get "SSH Key - $label (auth)" --fields label="public key" --reveal)"
+
+  echo "==> Generating SSH signing key for '$label' in 1Password"
+  op item create --category="SSH Key" --title="SSH Key - $label (signing)" --ssh-generate-key=ed25519 >/dev/null
+  signing_pub="$(op item get "SSH Key - $label (signing)" --fields label="public key" --reveal)"
+
+  printf '%s\n' "$signing_pub" > "$signing_key.pub"
+  chmod 600 "$signing_key.pub"
+else
+  if [ -e "$auth_key" ] || [ -e "$signing_key" ]; then
+    echo "$auth_key or $signing_key already exists; move them aside first." >&2
+    exit 1
+  fi
+
+  askpass="$(mktemp)"
+  trap 'rm -f "$askpass"' EXIT
+  printf '#!/bin/sh\nprintf %%s "$KEY_PASSPHRASE"\n' > "$askpass"
+  chmod 700 "$askpass"
+
+  generate() {
+    local file="$1" comment="$2" pass
+    pass="$(openssl rand -base64 24)"
+    ssh-keygen -q -t ed25519 -N "$pass" -C "$comment" -f "$file"
+    KEY_PASSPHRASE="$pass" SSH_ASKPASS="$askpass" SSH_ASKPASS_REQUIRE=force \
+      ssh-add --apple-use-keychain "$file" 2>/dev/null
+    PASSPHRASES+=("$comment: $pass")
+  }
+
+  PASSPHRASES=()
+  echo "==> Generating passphrase-protected SSH keys for '$label'"
+  generate "$auth_key" "$label (auth)"
+  generate "$signing_key" "$label (signing)"
+
+  auth_pub="$(cat "$auth_key.pub")"
+  signing_pub="$(cat "$signing_key.pub")"
+
+  echo
+  echo "Save these passphrases in LastPass now (the macOS keychain holds the only other copy):"
+  printf '  %s\n' "${PASSPHRASES[@]}"
+  echo
+
+  if [ ! -e ~/.ssh/config ]; then
+    cat > ~/.ssh/config <<EOF
+Host *
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+  AddKeysToAgent yes
+  IdentityFile $auth_key
+EOF
+    chmod 600 ~/.ssh/config
+  fi
+fi
 
 echo "==> Registering keys with GitHub"
 gh auth refresh -h github.com -s admin:public_key,admin:ssh_signing_key
@@ -32,6 +114,23 @@ gh ssh-key add "$auth_keyfile" --type authentication --title "$label (auth)"
 gh ssh-key add "$signing_keyfile" --type signing --title "$label (signing)"
 rm -f "$auth_keyfile" "$signing_keyfile"
 
+allowed_signers=~/.config/git/allowed_signers
+[ -L "$allowed_signers" ] && rm -f "$allowed_signers"
+printf '%s namespaces="git" %s\n' "$email" "$signing_pub" >> "$allowed_signers"
+
+if [ -e ~/.gitconfig.local ]; then
+  echo "~/.gitconfig.local already exists; not overwriting. It needs user.email = $email"
+else
+  {
+    printf '[user]\n\temail = %s\n' "$email"
+    if [ "$backend" = op ]; then
+      printf '[gpg "ssh"]\n\tprogram = /Applications/1Password.app/Contents/MacOS/op-ssh-sign\n'
+    fi
+  } > ~/.gitconfig.local
+fi
+
 echo
-echo "Done. Add a line to ~/.config/git/allowed_signers for whichever email(s) will sign from this machine:"
-echo "<email> namespaces=\"git\" $signing_pub"
+echo "Done ($backend backend)."
+if [ "$backend" = local ]; then
+  echo "Add to your shell startup so keys reload after a reboot: ssh-add --apple-load-keychain -q"
+fi

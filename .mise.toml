@@ -23,7 +23,7 @@ description = "Enable the CUPS web admin interface (http://localhost:631). Pass 
 run = "bin/cups-defaults"
 
 [tasks."ssh-keys-new-machine"]
-description = "Generate per-machine SSH auth + signing keys in 1Password, register with GitHub"
+description = "Generate per-machine SSH auth + signing keys (1Password if available, else local passphrase-protected keys in the macOS keychain), register with GitHub, write ~/.gitconfig.local"
 run = "bin/ssh-keys-new-machine"
 
 [tasks."arch-install"]
