@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# a client machine's brew state is the curated subset plus whatever the client requires
+if [ "$("$repo/bin/role")" != full ]; then
+  echo "Refusing to regenerate Brewfile from a client machine; edit Brewfile.client by hand instead." >&2
+  exit 1
+fi
+
+brew bundle dump --force --file "$repo/Brewfile"
+# dump writes local taps as absolute paths; keep them relative to the repo
+sed -i '' "s|\"$repo/\([^\"]*\)\"|File.expand_path(\"\1\", __dir__)|" "$repo/Brewfile"
+
+if ! brew bundle check --no-upgrade --file "$repo/Brewfile.client" >/dev/null; then
+  echo "Warning: Brewfile.client lists packages not installed here:" >&2
+  brew bundle check --no-upgrade --verbose --file "$repo/Brewfile.client" >&2 || true
+fi

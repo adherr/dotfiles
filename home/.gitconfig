@@ -2,13 +2,13 @@
 	format = ssh
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-	allowedSignersFile = /Users/andrewherr/.config/git/allowed_signers
+	allowedSignersFile = ~/.config/git/allowed_signers
 [commit]
 	gpgsign = true
 [user]
 	name = Andrew Herr
 	email = andrew.herr@testdouble.com
-	signingkey = /Users/andrewherr/.ssh/git_signing_key.pub
+	signingkey = ~/.ssh/git_signing_key.pub
 [diff]
 	algorithm = histogram
 [column]
@@ -32,16 +32,9 @@
 	conflictstyle = zdiff3
 [color]
 	ui = true
-# New client identity: create ~/.gitconfig.<client> with [user] email (and
-# name/signingkey only if they differ from the defaults above), add an
-# includeif block below for its gitdir, and add a line to
-# ~/.config/git/allowed_signers for the new email using the same signing key
-# so `git log --show-signature` verifies commits under that identity too.
-[includeif "gitdir:/Users/andrewherr/src/focused/**/.git"]
-	path = ~/.gitconfig.focused
-[includeif "gitdir:/Users/andrewherr/src/thoughtbot/**/.git"]
-	path = ~/.gitconfig.thoughtbot
 [remote]
 	pushDefault = origin
+# Client identities never go in this repo: put includeif blocks pointing at
+# ~/.gitconfig.<client> in the untracked ~/.gitconfig.local.
 [include]
 	path = ~/.gitconfig.local

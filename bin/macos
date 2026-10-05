@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Runs every macOS-only setup script in one shot. Each step is also runnable
-# on its own via its own `mise run` task, for when you only need one of them.
+# Runs every macOS-only setup script for this machine's role in one shot. Each
+# step is also runnable on its own via its own `mise run` task.
 bin="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+role="$("$bin/role")"
 
-"$bin/macos-defaults"
-"$bin/tableplus-defaults"
-"$bin/ghostty-terminfo-install"
-"$bin/plexmono-install"
 ssh_keys=0
 printers=""
 for arg in "$@"; do
@@ -18,8 +15,15 @@ for arg in "$@"; do
   esac
 done
 
-# shellcheck disable=SC2086
-"$bin/cups-defaults" $printers
+"$bin/macos-defaults"
+"$bin/ghostty-terminfo-install"
+"$bin/plexmono-install"
+
+if [ "$role" = full ]; then
+  "$bin/tableplus-defaults"
+  # shellcheck disable=SC2086
+  "$bin/cups-defaults" $printers
+fi
 
 # generates new credentials, so opt-in only
 if [ "$ssh_keys" = 1 ]; then

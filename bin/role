@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Prints this machine's role (full|client), set by `mise run init`.
+file="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/role"
+if [ ! -s "$file" ]; then
+  echo "No machine role set; run 'mise run init -- --role full|client' first." >&2
+  exit 1
+fi
+role="$(tr -d '[:space:]' < "$file")"
+case "$role" in
+  full|client) echo "$role" ;;
+  *) echo "Invalid role '$role' in $file (expected full or client)" >&2; exit 1 ;;
+esac

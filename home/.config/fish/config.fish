@@ -6,6 +6,9 @@ end
 
 set -g fish_greeting
 
+# settings.json env values don't expand ~/$HOME, so this can't live there
+set -gx CLAUDE_CODE_TMPDIR $HOME/src/claude-tmp
+
 # Default autosuggestion color is too close to normal text brightness to read
 # as "ghost text" (looks like it's already typed). Dim it to base16 Tomorrow's
 # base03 (comment color, matches Ghostty's `theme = Tomorrow`) and italicize.

@@ -1,4 +1,4 @@
-tap "andrewherr/tableplus", "/Users/andrewherr/dotfiles/homebrew-tableplus", trusted: { casks: ["tableplus-licensed"] }
+tap "andrewherr/tableplus", File.expand_path("homebrew-tableplus", __dir__), trusted: { casks: ["tableplus-licensed"] }
 tap "d12frosted/emacs-plus", trusted: true
 tap "hashicorp/tap", trusted: true
 tap "heroku/brew", trusted: true

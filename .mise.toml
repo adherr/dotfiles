@@ -1,3 +1,15 @@
+[tasks.init]
+description = "Record this machine's role (pass -- --role full|client) and pin this repo's commit email. Run first on a new machine"
+run = "bin/init"
+
+[tasks.bootstrap]
+description = "New-machine setup for this machine's role: link, brew bundle (Brewfile or Brewfile.client), mise install, macos. Extra args go to the macos task"
+run = "bin/bootstrap"
+
+[tasks."brewfile-dump"]
+description = "Regenerate Brewfile from installed packages (full machines only) and check Brewfile.client is still a subset"
+run = "bin/brewfile-dump"
+
 [tasks.link]
 description = "Symlink dotfiles from ./home into $HOME"
 run = "bin/link"
@@ -7,7 +19,7 @@ description = "Remove dotfiles symlinks from $HOME"
 run = "bin/unlink"
 
 [tasks.macos]
-description = "Run every macOS-only setup script (macos-defaults, tableplus-defaults, ghostty-terminfo-install, plexmono-install, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
+description = "Run every macOS-only setup script for this machine's role (macos-defaults, ghostty-terminfo-install, plexmono-install; full machines also get tableplus-defaults, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
 run = "bin/macos"
 
 [tasks.tableplus-defaults]

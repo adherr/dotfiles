@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# New-machine setup for this machine's role. Args are passed through to bin/macos.
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+role="$("$repo/bin/role")"
+
+"$repo/bin/link"
+
+if [ "$role" = client ]; then
+  brew bundle --file "$repo/Brewfile.client"
+else
+  brew bundle --file "$repo/Brewfile"
+fi
+
+mise install
+
+if [ "$(uname)" = Darwin ]; then
+  "$repo/bin/macos" "$@"
+fi

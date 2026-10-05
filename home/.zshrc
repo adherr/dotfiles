@@ -62,14 +62,9 @@ bindkey "^[B" emacs-backward-word
 
 # Use 1password ssh-agent
 [[ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ]] && export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-# this breaks things that try to load things into the agent automatically, like teleport
-# luckily, at Roadie we don't really need those certs in the agent because they get added to the kube config
-export TELEPORT_USE_LOCAL_SSH_AGENT=false
 
 # 1Password CLI uses Touch ID
 OP_BIOMETRIC_UNLOCK_ENABLED=true
-# 1Password plugins seem neat, but without the terraform one I'm stuck (at Focused)
-# source ${XDG_CONFIG_HOME:-${HOME}/.config}/op/plugins.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -170,11 +165,11 @@ alias cd='z'
 alias j='z'
 alias jj='zi'
 
-# AWS ECR login (from Job at Focused)
-alias ecr_login='aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(aws sts get-caller-identity | jq -r ".Account").dkr.ecr.us-east-1.amazonaws.com'
-
 # nix devenv
 command -v devenv >/dev/null && eval "$(devenv hook zsh)"
 
 # mise
 eval "$(mise activate zsh)"
+
+# untracked per-machine/per-client config, never committed
+for f in ~/.config/zsh/local.d/*.zsh(N); do source $f; done

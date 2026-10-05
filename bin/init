@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  echo "usage: init --role full|client" >&2
+  exit 2
+}
+
+role=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --role) role="${2:-}"; shift 2 ;;
+    *) usage ;;
+  esac
+done
+[ "$role" = full ] || [ "$role" = client ] || usage
+
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+dir="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles"
+mkdir -p "$dir"
+echo "$role" > "$dir/role"
+echo "Machine role: $role ($dir/role)"
+
+# ~/.gitconfig.local may override the global identity (e.g. a client email on a client machine)
+for r in "$repo" "$repo/home/.config/emacs"; do
+  git -C "$r" config user.email andrew.herr@testdouble.com
+  echo "Pinned $r commit email to $(git -C "$r" config user.email)"
+done

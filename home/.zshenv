@@ -7,3 +7,6 @@
 # zoxide's chpwd hook, so the doctor fires on every cd. zoxide intends
 # _ZO_DOCTOR=0 as the off switch; it lives here so it reaches those subshells.
 export _ZO_DOCTOR=0
+
+# settings.json env values don't expand ~/$HOME, so this can't live there
+export CLAUDE_CODE_TMPDIR="$HOME/src/claude-tmp"
