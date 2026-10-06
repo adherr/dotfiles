@@ -30,4 +30,15 @@ if status is-interactive
     mise activate fish | source
     zoxide init fish --cmd cd | source
     fzf --fish | source
+
+    function e
+        set -q argv[1]; or set argv .
+        if string match -qr '^ghostel(,|$)' -- "$INSIDE_EMACS"
+            for f in $argv
+                ghostel_cmd find-file-other-window (path resolve -- $f)
+            end
+        else
+            emacsclient -n $argv
+        end
+    end
 end

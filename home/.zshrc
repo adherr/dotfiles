@@ -86,6 +86,15 @@ alias en='emacsclient -n'
 alias ec='emacsclient -c'
 alias ecn='emacsclient -n -c'
 
+e() {
+  if [[ "${${INSIDE_EMACS-}%%,*}" = 'ghostel' ]]; then
+    local f
+    for f in "${@:-.}"; do ghostel_cmd find-file-other-window "${f:A}"; done
+  else
+    emacsclient -n "${@:-.}"
+  fi
+}
+
 # Copy an image file to the macOS clipboard (so you can paste into Slack, etc.)
 # Source - https://stackoverflow.com/a/30578507
 # Posted by Mark Setchell, modified by community. See post 'Timeline' for change history
