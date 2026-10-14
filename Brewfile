@@ -10,8 +10,6 @@ brew "xz"
 brew "libtiff"
 # Flexible lightweight test report tool
 brew "allure"
-# Cryptography and SSL/TLS Toolkit
-brew "openssl@3"
 # Command-line interface for SQLite
 brew "sqlite"
 # Download with resuming and segmented downloading
@@ -28,6 +26,8 @@ brew "awk"
 brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # GNU binary tools for native development
@@ -112,6 +112,8 @@ brew "graphviz"
 brew "grep"
 # Popular GNU data compression program
 brew "gzip"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
 # C/C++ and Java libraries for Unicode and globalization
 brew "icu4c@76"
 # Tools and libraries to manipulate images in select formats
@@ -148,8 +150,6 @@ brew "p7zip"
 brew "pandoc"
 # Minimal dumb-terminal emulation program
 brew "picocom"
-# Package compiler and linker metadata toolkit
-brew "pkgconf"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # Object-relational database system
@@ -206,6 +206,8 @@ brew "ty"
 brew "unbound"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
+# Image processing library
+brew "vips"
 # Cross-platform C++ GUI toolkit
 brew "wxwidgets"
 # Command-line tool to install and switch between multiple versions of Xcode
@@ -286,6 +288,8 @@ cask "lens"
 cask "loom"
 # Shows the next meeting in the menu bar
 cask "meetingbar"
+# Multi-platform web browser
+cask "microsoft-edge"
 # Meet, chat, call, and collaborate in just one place
 cask "microsoft-teams"
 # Native app email client for Gmail
