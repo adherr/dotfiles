@@ -1,11 +1,7 @@
 # uniquify PATH
 typeset -U -g PATH path
 # add non-linked homebrew packages to override system packages
-path=( $(brew --prefix)/opt/scala@2.13/bin $(brew --prefix)/opt/mysql-client/bin $(brew --prefix)/opt/curl/bin $(brew --prefix)/opt/make/libexec/gnubin $(brew --prefix)/opt/python/libexec/bin /Library/TeX/texbin $(brew --prefix)/bin $path )
-# put in by packaging tools
-path=( $path $HOME/.cargo/bin )
-# windsurf
-path=( $HOME/.codeium/windsurf/bin $path )
+path=( $(brew --prefix)/opt/curl/bin $(brew --prefix)/opt/python/libexec/bin $(brew --prefix)/bin $path )
 # Android studio
 android_path=$HOME/Library/Android/sdk
 path=( $android_path/platform-tools $android_path/emulator $path )

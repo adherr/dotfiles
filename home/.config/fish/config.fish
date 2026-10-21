@@ -15,7 +15,9 @@ set -gx CLAUDE_CODE_TMPDIR $HOME/src/claude-tmp
 set -g fish_color_autosuggestion 969896 --italics
 
 if status is-interactive
-    fish_add_path -g $HOME/bin $HOME/.local/bin $HOME/.docker/bin
+    set -l android_path $HOME/Library/Android/sdk
+    # -m: /etc/paths.d puts brew's bin after /usr/bin; move it ahead
+    fish_add_path -gm $HOME/bin $HOME/.local/bin $HOME/.docker/bin $android_path/platform-tools $android_path/emulator (brew --prefix)/opt/curl/bin (brew --prefix)/opt/python/libexec/bin (brew --prefix)/bin
 
     set -l op_sock ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
     if test -S $op_sock
