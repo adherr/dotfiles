@@ -21,6 +21,7 @@ done
 
 if [ "$role" = full ]; then
   "$bin/tableplus-defaults"
+  "$bin/sudo-touchid"
   # shellcheck disable=SC2086
   "$bin/cups-defaults" $printers
 fi

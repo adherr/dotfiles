@@ -19,7 +19,7 @@ description = "Remove dotfiles symlinks from $HOME"
 run = "bin/unlink"
 
 [tasks.macos]
-description = "Run every macOS-only setup script for this machine's role (macos-defaults, ghostty-terminfo-install, plexmono-install; full machines also get tableplus-defaults, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
+description = "Run every macOS-only setup script for this machine's role (macos-defaults, ghostty-terminfo-install, plexmono-install; full machines also get tableplus-defaults, sudo-touchid, cups-defaults). Pass --with-ssh-keys to also run ssh-keys-new-machine, --with-printers to also add the home-LAN network printers"
 run = "bin/macos"
 
 [tasks.tableplus-defaults]
@@ -45,6 +45,10 @@ run = "bin/plexmono-install"
 [tasks."arch-install"]
 description = "Install pinned packages on Arch via paru (pacman.txt)"
 run = "bin/arch-install"
+
+[tasks."sudo-touchid"]
+description = "Enable Touch ID for sudo via /etc/pam.d/sudo_local, with pam_reattach so it also works inside tmux"
+run = "bin/sudo-touchid"
 
 [tasks."ghostty-terminfo-install"]
 description = "Install Ghostty's terminfo entry into ~/.terminfo"

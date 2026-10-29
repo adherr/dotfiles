@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Touch ID for sudo, including inside tmux (pam_reattach). sudo_local survives macOS updates.
+reattach="$(brew --prefix pam-reattach)/lib/pam/pam_reattach.so"
+if [ ! -f "$reattach" ]; then
+  echo "pam-reattach not installed: brew install pam-reattach" >&2
+  exit 1
+fi
+
+want="auth       optional       $reattach ignore_ssh
+auth       sufficient     pam_tid.so"
+
+if [ "$(cat /etc/pam.d/sudo_local 2>/dev/null)" = "$want" ]; then
+  echo "Touch ID for sudo already enabled"
+  exit 0
+fi
+
+printf '%s\n' "$want" | sudo tee /etc/pam.d/sudo_local >/dev/null
+echo "Touch ID for sudo enabled (/etc/pam.d/sudo_local)"

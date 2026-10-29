@@ -146,6 +146,8 @@ brew "nano"
 brew "openconnect"
 # 7-Zip (high compression file archiver) implementation
 brew "p7zip"
+# PAM module for reattaching to the user's GUI (Aqua) session
+brew "pam-reattach"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 # Minimal dumb-terminal emulation program
