@@ -95,5 +95,6 @@
   "theme": "auto",
   "editorMode": "normal",
   "keybindingFlavor": "readline",
-  "autoCompactEnabled": false
+  "autoCompactEnabled": false,
+  "tui": "default"
 }
