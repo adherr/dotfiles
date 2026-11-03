@@ -18,7 +18,7 @@ fi
 # with a CUPS "Generic" driver instead.
 declare -A printers=(
   [trout]="socket://192.168.1.5:9100"
-  [rainbow_trout]="lpd://192.168.1.99/"
+  [rainbow_trout]="socket://192.168.1.99:9100"
 )
 
 # trout uses PCL rather than PostScript: printing PDFs from Firefox to the
@@ -30,10 +30,25 @@ declare -A drivers=(
   [rainbow_trout]="drv:///sample.drv/generic.ppd"
 )
 
+# rainbow_trout hit "ioerror / offending command image" mid-image: raw binary
+# image bytes read as PS channel control chars. TBCP escapes them, but the
+# generic PPD doesn't advertise it, so CUPS rejects protocol=TBCP without a patch.
+declare -A protocols=(
+  [rainbow_trout]="TBCP"
+)
+
 for name in "${!printers[@]}"; do
   uri="${printers[$name]}"
   driver="${drivers[$name]}"
   lpadmin -p "$name" -E -v "$uri" -m "$driver" -D "$name"
+  if [ -n "${protocols[$name]:-}" ]; then
+    ppd="$(mktemp)"
+    { cat "/etc/cups/ppd/$name.ppd"; echo "*Protocols: ${protocols[$name]}"; } > "$ppd"
+    lpadmin -p "$name" -P "$ppd"
+    rm "$ppd"
+    # separate call: -o is validated against the PPD in effect before -P applies
+    lpadmin -p "$name" -o "protocol=${protocols[$name]}"
+  fi
   # lpadmin -E enables the printer but doesn't clear a "rejecting jobs" state
   cupsaccept "$name"
   echo "Printer added: $name ($uri)"
