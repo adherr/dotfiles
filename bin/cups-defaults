@@ -2,9 +2,12 @@
 set -euo pipefail
 
 # Enables the CUPS web admin interface at http://localhost:631
-cupsctl WebInterface=yes
-
-echo "CUPS web admin interface enabled: http://localhost:631"
+# macOS 27 removed the web interface; cupsctl refuses to set it there
+if cupsctl WebInterface=yes; then
+  echo "CUPS web admin interface enabled: http://localhost:631"
+else
+  echo "CUPS web admin interface unavailable on this macOS; skipping"
+fi
 
 # home-LAN printers; meaningless (and noisy to endpoint agents) elsewhere
 if [ "${1:-}" != "--with-printers" ]; then
