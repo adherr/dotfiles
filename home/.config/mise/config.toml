@@ -14,5 +14,9 @@ run = "{{env.HOME}}/dotfiles/bin/emacs-packages-update"
 description = "Pin straight.el package versions to the lockfile, once verified healthy"
 run = "{{env.HOME}}/dotfiles/bin/emacs-packages-freeze"
 
+[tasks."emacs-packages-thaw"]
+description = "Reset straight.el packages to the lockfile and rebuild (restart Emacs after)"
+run = "{{env.HOME}}/dotfiles/bin/emacs-packages-thaw"
+
 [settings]
 experimental = true

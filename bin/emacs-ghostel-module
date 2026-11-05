@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Checking native module (ghostel)..."
+emacsclient --eval '
+(let (msgs)
+  ;; load by absolute path, not require: ghostel-module-install.el exists as a
+  ;; separate build dir per package (ghostel/ghostel-comint/ghostel-compile all
+  ;; share the repo) but they are byte-identical copies. ghostel-module-directory
+  ;; is pinned in init.el to XDG_CACHE_HOME, outside straight build tree, so
+  ;; all three packages already resolve to one shared module location - no
+  ;; per-package symlinking needed, and nothing here should touch straight
+  ;; build dirs (a straight rebuild wipes them, which is the bug that pinning
+  ;; this directory fixed).
+  (when (load (expand-file-name "ghostel-module-install.el" (straight--build-dir "ghostel"))
+              t t)
+    (let* ((dir (ghostel--module-directory))
+           (ver (ghostel--read-module-sidecar-version dir)))
+      (if (and ver (not (version< ver ghostel--minimum-module-version)))
+          (push (format "ghostel: module current (%s)" ver) msgs)
+        ;; PARKED as of 2026-09-16: Homebrew zig 0.16.0 fails to build the
+        ;; vendored stb_image.c against the current Xcode SDK
+        ;; (-Wnullability-completeness), so download instead of compile
+        ;; until that is fixed upstream. See init.el for the flip-back note.
+        (push (if (ghostel--download-module dir)
+                  "ghostel: module downloaded"
+                "ghostel: module download FAILED, run M-x ghostel-module-compile")
+              msgs))))
+  (mapconcat (function identity) (nreverse msgs) "\n"))' \
+  | sed -e 's/^"//' -e 's/"$//' -e 's/\\n/\n/g' \
+  || echo "Native module check failed; inspect manually before restarting."

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! emacsclient --eval '(+ 1 1)' >/dev/null 2>&1; then
+  echo "No Emacs daemon reachable. Start Emacs first, then re-run." >&2
+  exit 1
+fi
+
+echo "This blocks your Emacs session while repos are checked out and rebuilt."
+echo "If a repo has local changes, straight prompts in the Emacs frame; answer there."
+echo
+
+emacsclient --eval '(straight-thaw-versions)' >/dev/null
+emacsclient --eval '(straight-check-all)' >/dev/null
+
+"$(dirname "$0")/emacs-ghostel-module"
+
+echo
+echo "Packages reset to ~/.config/emacs/straight/versions/default.el. Restart Emacs to load them."
