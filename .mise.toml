@@ -1,5 +1,5 @@
 [tasks.init]
-description = "Record this machine's role (pass -- --role full|client) and pin this repo's commit email. Run first on a new machine"
+description = "Record this machine's role (pass -- --role full|client), pin this repo's commit email, and disable git push on client machines. Run first on a new machine"
 run = "bin/init"
 
 [tasks.bootstrap]

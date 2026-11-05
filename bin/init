@@ -25,4 +25,12 @@ echo "Machine role: $role ($dir/role)"
 for r in "$repo" "$repo/home/.config/emacs"; do
   git -C "$r" config user.email andrew.herr@testdouble.com
   echo "Pinned $r commit email to $(git -C "$r" config user.email)"
+  if [ "$role" = client ]; then
+    # client machines have no push access; fail fast instead of at auth
+    git -C "$r" remote set-url --push origin DISABLED-on-client-machines
+    echo "Disabled push for $r"
+  elif git -C "$r" config --get remote.origin.pushurl >/dev/null; then
+    git -C "$r" config --unset remote.origin.pushurl
+    echo "Re-enabled push for $r"
+  fi
 done
