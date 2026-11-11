@@ -1,4 +1,6 @@
 theme = Tomorrow
+# written by my/theme-set in Emacs; overrides the theme above
+config-file = ?~/.local/state/ghostty/theme.ghostty
 font-family = BlexMono Nerd Font Mono
 adjust-cell-width = -9%
 cursor-style-blink = false
