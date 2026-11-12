@@ -20,3 +20,10 @@ run = "{{env.HOME}}/dotfiles/bin/emacs-packages-thaw"
 
 [settings]
 experimental = true
+
+[hooks]
+# global, so it covers ruby versions installed by any project
+postinstall = '''
+printf '%s' "$MISE_INSTALLED_TOOLS" | jq -r '.[] | select(.name == "ruby") | .install_path' |
+  while read -r dir; do "$dir/bin/gem" install ruby-lsp; done
+'''
