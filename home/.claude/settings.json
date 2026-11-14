@@ -48,12 +48,6 @@
         "repo": "cloudflare/skills"
       }
     },
-    "testdouble-skills-internal": {
-      "source": {
-        "source": "github",
-        "repo": "testdouble/skills-internal"
-      }
-    },
     "claude-plugins-official": {
       "source": {
         "source": "github",
