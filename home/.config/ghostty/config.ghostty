@@ -4,7 +4,10 @@ config-file = ?~/.local/state/ghostty/theme.ghostty
 font-family = BlexMono Nerd Font Mono
 adjust-cell-width = -9%
 cursor-style-blink = false
-command = /opt/homebrew/bin/fish
+# Start fish from wherever it's installed: Homebrew on Apple silicon, Homebrew on Intel, or the system (Linux).
+# Starting it via env hides it from Ghostty, so name the shell for shell integration.
+command = /usr/bin/env PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin fish --login
+shell-integration = fish
 macos-option-as-alt = true
 keybind = shift+page_up=scroll_page_up
 keybind = shift+page_down=scroll_page_down
